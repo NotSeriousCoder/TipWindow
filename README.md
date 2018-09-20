@@ -42,3 +42,6 @@
 			
 ### 2.自定义adapter
 	继承GeneralAdapter<Data>
+
+## BUG反馈
+	请在Github直接提，或者邮箱找我710267819@qq.com
