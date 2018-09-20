@@ -10,7 +10,8 @@
 	}
   
 ### 2.在你要用这个控件的模块gradle文件
-	implementation 'com.github.NotSeriousCoder:NumberTipView:{lastversion}'
+	implementation 'com.github.NotSeriousCoder:TipWindow:{lastversion}'
+	lastversion目前是1.0.0
 
 ## 使用方法
 ### 1.常规使用
