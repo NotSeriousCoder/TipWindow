@@ -11,30 +11,25 @@
   
 ### 2.在你要用这个控件的模块gradle文件
 	implementation 'com.github.NotSeriousCoder:TipWindow:{lastversion}'
-	lastversion目前是1.0.0
+	lastversion目前是1.0.4
 
 ## 使用方法
 ### 1.常规使用
 	private SimpleListAdapter adapter;
 	
 	if (adapter == null) {
-                    List<String> data = new ArrayList<>();
-                    data.add("13710267845");
-                    data.add("15025515656");
-                    data.add("13325161561");
-                    data.add("18945851215");
-                    data.add("18154545455");
-                    data.add("16545145158");
-                    data.add("15454661456");
-                    data.add("18714545458");
-                    adapter = new SimpleListAdapter(MainActivity.this, data, Color.parseColor("#1a56f1"));
+                    ...
+                    adapter = new SimpleListAdapter(activity, data, Color.parseColor("#1a56f1"));
                 }
-         new ListTipWindow.Builder(MainActivity.this)
+         ListTipWindow.Builder(activity)
                         .setAdapter(adapter)
-                        .setOnItemClickListener(new OnItemClickListener<String>() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id, String data) {
-                                Toast.makeText(getBaseContext(), data, Toast.LENGTH_SHORT).show();
+                        .setOnItemClickListener(object : OnItemClickListener<String> {
+                            override fun onItemDeleteClick(position: Int, item: String?) {
+                               ToastMaker.makeToast(baseContext, item)
+                            }
+
+                            override fun onItemClick(p0: AdapterView<*>?, parent: View?, position: Int, id: Long, item: String?) {
+                                ToastMaker.makeToast(baseContext, item)
                             }
                         })
                         .setAlpha(0.3f)
