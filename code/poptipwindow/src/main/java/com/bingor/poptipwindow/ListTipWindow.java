@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 
 import com.bingor.poptipwindow.adapter.GeneralAdapter;
+import com.bingor.poptipwindow.impl.OnAdapterStateChangeListener;
 import com.bingor.poptipwindow.impl.OnItemClickListener;
 import com.bingor.poptipwindow.util.UnitConverter;
 
@@ -71,6 +72,19 @@ public class ListTipWindow {
     }
 
     private void initList() {
+        adapter.setOnAdapterStateChangeListener(new OnAdapterStateChangeListener() {
+            @Override
+            public void onItemDeleteClick(int position, Object data) {
+                int pos = adapter.getPositionChecked();
+                if (pos >= adapter.getCount()-1 && adapter.getCount() > 1) {
+                    pos--;
+                    adapter.setPositionChecked(pos);
+                }
+                adapter.removeItem(position);
+                dismiss();
+                onItemClickListener.onItemDeleteClick(position, data);
+            }
+        });
         lvList.setAdapter(adapter);
         lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
 
+import com.bingor.poptipwindow.impl.OnAdapterStateChangeListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,7 @@ public abstract class GeneralAdapter<Data> extends BaseAdapter {
     protected List<Data> datas;
     protected LayoutInflater inflater;
     protected int positionChecked;
+    protected OnAdapterStateChangeListener<Data> onAdapterStateChangeListener;
 
     public GeneralAdapter(Context context, List<Data> datas) {
         this.context = context;
@@ -122,5 +125,13 @@ public abstract class GeneralAdapter<Data> extends BaseAdapter {
 
     public void setPositionChecked(int positionChecked) {
         this.positionChecked = positionChecked;
+    }
+
+    public OnAdapterStateChangeListener getOnAdapterStateChangeListener() {
+        return onAdapterStateChangeListener;
+    }
+
+    public void setOnAdapterStateChangeListener(OnAdapterStateChangeListener onAdapterStateChangeListener) {
+        this.onAdapterStateChangeListener = onAdapterStateChangeListener;
     }
 }

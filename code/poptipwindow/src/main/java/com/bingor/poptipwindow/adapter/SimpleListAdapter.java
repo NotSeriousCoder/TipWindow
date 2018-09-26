@@ -6,7 +6,9 @@ import android.support.annotation.ColorInt;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bingor.poptipwindow.R;
 import com.bingor.poptipwindow.util.ShapeSelectorUtil;
@@ -30,12 +32,13 @@ public class SimpleListAdapter extends GeneralAdapter<String> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         convertView = inflater.inflate(R.layout.view_list_item, null);
 
         FrameLayout flCheck = convertView.findViewById(R.id.fl_m_view_list_item_p_check);
         View viewCheck = convertView.findViewById(R.id.view_m_view_list_item_p_check);
         TextView tvContent = convertView.findViewById(R.id.tv_m_view_list_item_p_content);
+        ImageView ivClose = convertView.findViewById(R.id.iv_m_view_list_item_p_close);
 
         if (position == positionChecked) {
             flCheck.setBackground(ShapeSelectorUtil.getDrawable(null, new ShapeSelectorUtil.CornersWrapper().setRadius(200), color, 0));
@@ -45,6 +48,15 @@ public class SimpleListAdapter extends GeneralAdapter<String> {
 //                        viewCheck.setVisibility(View.VISIBLE);
         }
         tvContent.setText(datas.get(position));
+
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onAdapterStateChangeListener != null) {
+                    onAdapterStateChangeListener.onItemDeleteClick(position, datas.get(position));
+                }
+            }
+        });
 
         return convertView;
     }

@@ -8,4 +8,6 @@ import android.widget.AdapterView;
  */
 public interface OnItemClickListener<T> {
     void onItemClick(AdapterView<?> parent, View view, int position, long id, T data);
+
+    void onItemDeleteClick(int position, T data);
 }

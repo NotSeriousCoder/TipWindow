@@ -48,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id, String data) {
                                 Toast.makeText(getBaseContext(), data, Toast.LENGTH_SHORT).show();
                             }
+
+                            @Override
+                            public void onItemDeleteClick(int position, String data) {
+                                Toast.makeText(getBaseContext(), "del==" + data, Toast.LENGTH_SHORT).show();
+                            }
                         })
                         .setAlpha(0.3f)
                         .create()
