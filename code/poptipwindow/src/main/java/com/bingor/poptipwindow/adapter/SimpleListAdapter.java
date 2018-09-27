@@ -20,14 +20,17 @@ import java.util.List;
  */
 public class SimpleListAdapter extends GeneralAdapter<String> {
     private int color;
+    private boolean needDelete;
 
     public SimpleListAdapter(Context context, List<String> datas, @ColorInt int color) {
         super(context, datas);
+        needDelete = true;
         this.color = color;
     }
 
     public SimpleListAdapter(Context context, @ColorInt int color) {
         super(context);
+        needDelete = true;
         this.color = color;
     }
 
@@ -49,15 +52,27 @@ public class SimpleListAdapter extends GeneralAdapter<String> {
         }
         tvContent.setText(datas.get(position));
 
-        ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onAdapterStateChangeListener != null) {
-                    onAdapterStateChangeListener.onItemDeleteClick(position, datas.get(position));
+        if (needDelete) {
+            ivClose.setVisibility(View.VISIBLE);
+            ivClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onAdapterStateChangeListener != null) {
+                        onAdapterStateChangeListener.onItemDeleteClick(position, datas.get(position));
+                    }
                 }
-            }
-        });
-
+            });
+        } else {
+            ivClose.setVisibility(View.GONE);
+        }
         return convertView;
+    }
+
+    public boolean isNeedDelete() {
+        return needDelete;
+    }
+
+    public void setNeedDelete(boolean needDelete) {
+        this.needDelete = needDelete;
     }
 }
