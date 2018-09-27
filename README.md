@@ -20,7 +20,7 @@
 	if (adapter == null) {
                     ...
                     adapter = new SimpleListAdapter(activity, data, Color.parseColor("#1a56f1"));
-					adapter.setNeedDelete(false);
+		    adapter.setNeedDelete(false);
                 }
          ListTipWindow.Builder(activity)
                         .setAdapter(adapter)
