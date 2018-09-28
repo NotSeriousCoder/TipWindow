@@ -13,7 +13,9 @@
         android:id="@+id/fl_m_view_list_item_p_check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="3dp">
+        android:layout_marginRight="10dp"
+        android:padding="3dp"
+        android:visibility="gone">
 
         <!--<ImageView-->
         <!--android:layout_width="18dp"-->
@@ -31,7 +33,6 @@
         android:id="@+id/tv_m_view_list_item_p_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:layout_marginBottom="1dp"
         android:layout_weight="1"
         android:gravity="center_vertical"

@@ -20,17 +20,19 @@ import java.util.List;
  */
 public class SimpleListAdapter extends GeneralAdapter<String> {
     private int color;
-    private boolean needDelete;
+    private boolean needDelete, needTag;
 
     public SimpleListAdapter(Context context, List<String> datas, @ColorInt int color) {
         super(context, datas);
         needDelete = true;
+        needTag = true;
         this.color = color;
     }
 
     public SimpleListAdapter(Context context, @ColorInt int color) {
         super(context);
         needDelete = true;
+        needTag = true;
         this.color = color;
     }
 
@@ -43,13 +45,19 @@ public class SimpleListAdapter extends GeneralAdapter<String> {
         TextView tvContent = convertView.findViewById(R.id.tv_m_view_list_item_p_content);
         ImageView ivClose = convertView.findViewById(R.id.iv_m_view_list_item_p_close);
 
-        if (position == positionChecked) {
-            flCheck.setBackground(ShapeSelectorUtil.getDrawable(null, new ShapeSelectorUtil.CornersWrapper().setRadius(200), color, 0));
+        if (needTag) {
+            flCheck.setVisibility(View.VISIBLE);
+            if (position == positionChecked) {
+                flCheck.setBackground(ShapeSelectorUtil.getDrawable(null, new ShapeSelectorUtil.CornersWrapper().setRadius(200), color, 0));
 //                        viewCheck.setVisibility(View.GONE);
-        } else {
-            flCheck.setBackground(ShapeSelectorUtil.getDrawable(null, new ShapeSelectorUtil.CornersWrapper().setRadius(200), Color.parseColor("#cccccc"), 0));
+            } else {
+                flCheck.setBackground(ShapeSelectorUtil.getDrawable(null, new ShapeSelectorUtil.CornersWrapper().setRadius(200), Color.parseColor("#cccccc"), 0));
 //                        viewCheck.setVisibility(View.VISIBLE);
+            }
+        } else {
+            flCheck.setVisibility(View.GONE);
         }
+
         tvContent.setText(datas.get(position));
 
         if (needDelete) {
@@ -74,5 +82,13 @@ public class SimpleListAdapter extends GeneralAdapter<String> {
 
     public void setNeedDelete(boolean needDelete) {
         this.needDelete = needDelete;
+    }
+
+    public boolean isNeedTag() {
+        return needTag;
+    }
+
+    public void setNeedTag(boolean needTag) {
+        this.needTag = needTag;
     }
 }

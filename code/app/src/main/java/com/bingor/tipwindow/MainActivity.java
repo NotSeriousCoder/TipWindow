@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
                     data.add("18714545458");
                     adapter = new SimpleListAdapter(MainActivity.this, data, Color.parseColor("#1a56f1"));
                     adapter.setNeedDelete(false);
+                    adapter.setNeedTag(true);
                 }
                 new ListTipWindow.Builder(MainActivity.this)
                         .setAdapter(adapter)
