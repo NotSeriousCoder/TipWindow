@@ -1,20 +1,21 @@
 package com.bingor.tipwindow;
 
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bingor.numbertipview.NumTipView;
-import com.bingor.poptipwindow.ListTipWindow;
+import com.bingor.poptipwindow.TipWindow;
 import com.bingor.poptipwindow.adapter.SimpleListAdapter;
+import com.bingor.poptipwindow.builder.CustomTipWindowBuilder;
+import com.bingor.poptipwindow.builder.ListTipWindowBuilder;
 import com.bingor.poptipwindow.impl.OnItemClickListener;
+import com.bingor.poptipwindow.impl.OnWindowStateChangedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         findViewById(R.id.tv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,8 +46,9 @@ public class MainActivity extends AppCompatActivity {
                     adapter.setNeedDelete(false);
                     adapter.setNeedTag(true);
                 }
-                new ListTipWindow.Builder(MainActivity.this)
+                new ListTipWindowBuilder(MainActivity.this)
                         .setAdapter(adapter)
+                        .setCancelable(false)
                         .setOnItemClickListener(new OnItemClickListener<String>() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id, String data) {
@@ -64,5 +68,41 @@ public class MainActivity extends AppCompatActivity {
 
         NumTipView numTipView = findViewById(R.id.ntv_m_frg_mine_p_msg_num);
         numTipView.setNum(15);
+
+
+        findViewById(R.id.bt_custom).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView tv = new TextView(MainActivity.this);
+                ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                tv.setLayoutParams(lp);
+                tv.setText("确定要删除这个文件吗？");
+                new CustomTipWindowBuilder(MainActivity.this)
+                        .setOK("好的")
+                        .setCancel("不要")
+                        .setContentView(tv)
+//                        .setTextContent("确定要删除这个文件吗~~")
+                        .setAlpha(0.3f)
+                        .setCancelable(false)
+                        .setOnWindowStateChangedListener(new OnWindowStateChangedListener() {
+                            @Override
+                            public void onOKClicked() {
+                                Toast.makeText(getBaseContext(), "好吧", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCancelClicked() {
+                                Toast.makeText(getBaseContext(), "取消", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onOutsideClicked() {
+                                Toast.makeText(getBaseContext(), "窗户消失", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .create()
+                        .show(findViewById(R.id.tv));
+            }
+        });
     }
 }
