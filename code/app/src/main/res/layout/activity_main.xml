@@ -21,19 +21,31 @@
         android:id="@+id/bt_custom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="自定义内容模式"/>
+        android:text="自定义内容模式" />
 
     <com.bingor.numbertipview.NumTipView
         android:id="@+id/ntv_m_frg_mine_p_msg_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#112233"
+        app:hor_padding="15dp"
         app:max_num="99"
         app:min_gone="false"
         app:min_num="0"
         app:text_color="#ffff13"
         app:text_size="10sp"
-        app:hor_padding="15dp"
         app:ver_padding="15dp" />
 
+    <com.bingor.picker.universalPicker.UniversalPickerView
+        android:id="@+id/upv_test"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:cycleable="true"
+        app:dividerColor="#551900"
+        app:dividerWidthRatio="0.8"
+        app:lineSpaceMultiplier="2"
+        app:textColorFocus="#1155dd"
+        app:textColorNormal="#a3dd12"
+        app:textSize="16sp"
+        app:visibleItemCount="5" />
 </LinearLayout>

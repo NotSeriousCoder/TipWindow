@@ -1,1 +1,1 @@
-include ':app', ':poptipwindow'
+include ':app', ':poptipwindow', ':picker'
