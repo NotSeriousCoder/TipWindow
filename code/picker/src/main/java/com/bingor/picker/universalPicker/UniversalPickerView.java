@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -76,11 +77,19 @@ public class UniversalPickerView extends LinearLayout {
     private void init() {
         setOrientation(LinearLayout.HORIZONTAL);
         setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        setBackgroundColor(Color.parseColor("#AA999C"));
     }
 
 
     protected WheelView createWheelView() {
         WheelView wheelView = new WheelView(getContext());
+
+        LayoutParams lp = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+        lp.weight = 1;
+        lp.gravity = Gravity.CENTER;
+        wheelView.setLayoutParams(lp);
+
+
         wheelView.setTextPadding(0);
         wheelView.setUseWeight(true);
         wheelView.setTextSizeAutoFit(true);
@@ -102,7 +111,46 @@ public class UniversalPickerView extends LinearLayout {
         wheelView.setOnItemSelectListener(new WheelView.OnItemSelectListener() {
             @Override
             public void onSelected(WheelView wheelView, int index) {
-                Log.d("HXB", "index==" + index);
+                Log.d("HXB", "index == " + index);
+                //滚轮组别
+                int group = (int) wheelView.getTag();
+                positions[group] = index;
+                //某组当前项
+                WheelItem wheelItem;
+                //该项的子列表
+                List<? extends WheelItem> children = datas;
+                if (group < 3) {
+                    for (int i = 0; i <= group; i++) {
+                        //对应组的位置
+                        int tempIndex = positions[i];
+                        wheelItem = children.get(tempIndex);
+                        children = wheelItem.getChildren();
+                    }
+                } else {
+                    children = null;
+                }
+                if (children != null) {
+                    WheelView nextWheelView;
+                    if (getChildCount() > group + 1) {
+                        nextWheelView = (WheelView) getChildAt(group + 1);
+                        nextWheelView.setVisibility(VISIBLE);
+                    } else {
+                        nextWheelView = createWheelView();
+                        addView(nextWheelView);
+                    }
+                    if (!cycleable || children.size() < 4) {
+                        nextWheelView.setCycleable(false);
+                    } else {
+                        nextWheelView.setCycleable(true);
+                    }
+                    nextWheelView.setTag(group + 1);
+                    nextWheelView.setItems(children);
+                    nextWheelView.setSelectedIndex(0);
+                } else {
+                    for (int i = group + 1; i < getChildCount(); i++) {
+                        getChildAt(i).setVisibility(GONE);
+                    }
+                }
             }
         });
 //        wheelView.setItems(data);
@@ -110,20 +158,17 @@ public class UniversalPickerView extends LinearLayout {
         return wheelView;
     }
 
-    protected void initWheel(int num) {
-        for (int i = 0; i < num; i++) {
-            WheelView wheelView = createWheelView();
-            LayoutParams lp = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
-            lp.weight = 1;
-            lp.gravity = Gravity.CENTER;
-            wheelView.setLayoutParams(lp);
-            wheelView.setTag(i);
-            addView(wheelView);
-            wheelView.setSelectedIndex(2);
+    protected void initWheel() {
+        WheelView wheelView = createWheelView();
+        if (!cycleable || datas.size() < 4) {
+            wheelView.setCycleable(false);
+        } else {
+            wheelView.setCycleable(true);
         }
-        WheelView wheelView = (WheelView) getChildAt(0);
+        wheelView.setTag(0);
+        addView(wheelView);
         wheelView.setItems(datas);
-        wheelView.setSelectedIndex(1);
+        wheelView.setSelectedIndex(0);
     }
 
     public void setDatas(final List<? extends WheelItem> datas) {
@@ -140,7 +185,7 @@ public class UniversalPickerView extends LinearLayout {
                     @Override
                     public void handleMessage(Message msg) {
                         super.handleMessage(msg);
-                        initWheel(msg.what);
+                        initWheel();
                     }
                 }.sendEmptyMessage(deep);
             }

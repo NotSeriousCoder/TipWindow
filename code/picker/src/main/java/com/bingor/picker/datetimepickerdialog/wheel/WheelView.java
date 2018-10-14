@@ -179,6 +179,7 @@ public class WheelView extends View {
             offset = 0;
             invalidate();
         }
+        itemSelectedCallback();
     }
 
     public final void setOnItemSelectListener(OnItemSelectListener onItemSelectListener) {
