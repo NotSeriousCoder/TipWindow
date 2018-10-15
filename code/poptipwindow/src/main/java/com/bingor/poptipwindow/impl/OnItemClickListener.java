@@ -3,6 +3,10 @@ package com.bingor.poptipwindow.impl;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.bingor.picker.datetimepickerdialog.wheel.WheelItem;
+
+import java.util.List;
+
 /**
  * Created by HXB on 2018/9/20.
  */

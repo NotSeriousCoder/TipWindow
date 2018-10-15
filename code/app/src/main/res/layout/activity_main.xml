@@ -23,6 +23,12 @@
         android:layout_height="wrap_content"
         android:text="自定义内容模式" />
 
+    <Button
+        android:id="@+id/bt_data_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="联动滚轮窗口"/>
+
     <com.bingor.numbertipview.NumTipView
         android:id="@+id/ntv_m_frg_mine_p_msg_num"
         android:layout_width="wrap_content"

@@ -42,7 +42,7 @@ public class TipWindow {
 
     //普通模式
     private LinearLayout contentParent;
-    private View contentView;
+    private View contentView, okCancelPadding;
     private TextView tvContent;
     private TextView tvOK, tvCancel;
     private String textOK, textCancel, textContent;
@@ -61,6 +61,7 @@ public class TipWindow {
             contentParent = rootView.findViewById(R.id.ll_m_view_tip_ok_cancel_p_content);
             tvOK = rootView.findViewById(R.id.tv_m_view_tip_ok_cancel_p_ok);
             tvCancel = rootView.findViewById(R.id.tv_m_view_tip_ok_cancel_p_cancel);
+            okCancelPadding = rootView.findViewById(R.id.view_m_view_tip_ok_cancel_p_ok_cancel_padding);
             initContent();
         } else if (adapter != null) {
             if (maxHeight == 0) {
@@ -136,9 +137,13 @@ public class TipWindow {
     private void initContent() {
         if (!TextUtils.isEmpty(textOK)) {
             tvOK.setText(textOK);
+            tvCancel.setVisibility(View.GONE);
+            okCancelPadding.setVisibility(View.GONE);
         }
         if (!TextUtils.isEmpty(textCancel)) {
             tvCancel.setText(textCancel);
+            tvOK.setVisibility(View.GONE);
+            okCancelPadding.setVisibility(View.GONE);
         }
 
         tvOK.setOnClickListener(new View.OnClickListener() {

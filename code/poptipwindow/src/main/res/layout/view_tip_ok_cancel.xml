@@ -46,15 +46,20 @@
 
             <TextView
                 android:id="@+id/tv_m_view_tip_ok_cancel_p_cancel"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
                 android:paddingLeft="8dp"
                 android:paddingTop="4dp"
                 android:paddingRight="8dp"
                 android:text="取消"
                 android:textColor="#333333"
                 android:textSize="14sp" />
+
+            <View
+                android:id="@+id/view_m_view_tip_ok_cancel_p_ok_cancel_padding"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/tv_m_view_tip_ok_cancel_p_ok"
