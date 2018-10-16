@@ -1,6 +1,7 @@
 package com.bingor.tipwindow;
 
-import com.bingor.picker.datetimepickerdialog.wheel.WheelItem;
+
+import com.bingor.poptipwindow.view.wheel.WheelItem;
 
 import java.util.List;
 

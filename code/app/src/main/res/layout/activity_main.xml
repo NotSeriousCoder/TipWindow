@@ -27,7 +27,7 @@
         android:id="@+id/bt_data_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="联动滚轮窗口"/>
+        android:text="联动滚轮窗口" />
 
     <com.bingor.numbertipview.NumTipView
         android:id="@+id/ntv_m_frg_mine_p_msg_num"
@@ -42,7 +42,7 @@
         app:text_size="10sp"
         app:ver_padding="15dp" />
 
-    <com.bingor.picker.universalPicker.UniversalPickerView
+    <com.bingor.poptipwindow.view.datetimepicker.DateTimePickerView
         android:id="@+id/upv_test"
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -54,4 +54,83 @@
         app:textColorNormal="#a3dd12"
         app:textSize="16sp"
         app:visibleItemCount="5" />
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="horizontal">-->
+
+
+    <!--<com.bingor.poptipwindow.view.wheel.NumberWheelView-->
+    <!--android:id="@+id/wv_test1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:cycleable="true"-->
+    <!--app:dividerColor="#551900"-->
+    <!--app:dividerWidthRatio="0.8"-->
+    <!--app:lineSpaceMultiplier="2"-->
+    <!--app:textColorFocus="#1155dd"-->
+    <!--app:textColorNormal="#a3dd12"-->
+    <!--app:textSize="16sp"-->
+    <!--app:visibleItemCount="5" />-->
+
+
+    <!--<com.bingor.poptipwindow.view.wheel.NumberWheelView-->
+    <!--android:id="@+id/wv_test2"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:cycleable="true"-->
+    <!--app:dividerColor="#551900"-->
+    <!--app:dividerWidthRatio="0.8"-->
+    <!--app:lineSpaceMultiplier="2"-->
+    <!--app:textColorFocus="#1155dd"-->
+    <!--app:textColorNormal="#a3dd12"-->
+    <!--app:textSize="16sp"-->
+    <!--app:visibleItemCount="5" />-->
+
+
+    <!--<com.bingor.poptipwindow.view.wheel.NumberWheelView-->
+    <!--android:id="@+id/wv_test3"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:cycleable="true"-->
+    <!--app:dividerColor="#551900"-->
+    <!--app:dividerWidthRatio="0.8"-->
+    <!--app:lineSpaceMultiplier="2"-->
+    <!--app:textColorFocus="#1155dd"-->
+    <!--app:textColorNormal="#a3dd12"-->
+    <!--app:textSize="16sp"-->
+    <!--app:visibleItemCount="5" />-->
+
+
+    <!--<com.bingor.poptipwindow.view.wheel.NumberWheelView-->
+    <!--android:id="@+id/wv_test4"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:cycleable="true"-->
+    <!--app:dividerColor="#551900"-->
+    <!--app:dividerWidthRatio="0.8"-->
+    <!--app:lineSpaceMultiplier="2"-->
+    <!--app:textColorFocus="#1155dd"-->
+    <!--app:textColorNormal="#a3dd12"-->
+    <!--app:textSize="16sp"-->
+    <!--app:visibleItemCount="5" />-->
+
+
+    <!--<com.bingor.poptipwindow.view.wheel.NumberWheelView-->
+    <!--android:id="@+id/wv_test5"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:cycleable="true"-->
+    <!--app:dividerColor="#551900"-->
+    <!--app:dividerWidthRatio="0.8"-->
+    <!--app:lineSpaceMultiplier="2"-->
+    <!--app:textColorFocus="#1155dd"-->
+    <!--app:textColorNormal="#a3dd12"-->
+    <!--app:textSize="16sp"-->
+    <!--app:visibleItemCount="5" />-->
+
+    <!--</LinearLayout>-->
+
+
 </LinearLayout>

@@ -4,14 +4,10 @@ import android.content.Context
 import android.support.annotation.ColorInt
 import android.support.annotation.FloatRange
 import android.support.annotation.IntRange
-import android.view.View
-import com.bingor.picker.datetimepickerdialog.wheel.WheelItem
-import com.bingor.picker.universalPicker.UniversalPickerView
-import com.bingor.poptipwindow.TipWindow
-import com.bingor.poptipwindow.adapter.GeneralAdapter
 import com.bingor.poptipwindow.impl.OnDataSelectedListener
-import com.bingor.poptipwindow.impl.OnItemClickListener
 import com.bingor.poptipwindow.impl.OnWindowStateChangedListener
+import com.bingor.poptipwindow.view.universalpicker.UniversalPickerView
+import com.bingor.poptipwindow.view.wheel.WheelItem
 
 /**
  * Created by HXB on 2018/10/8.

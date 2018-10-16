@@ -11,9 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bingor.numbertipview.NumTipView;
-import com.bingor.picker.datetimepickerdialog.wheel.WheelItem;
-import com.bingor.picker.universalPicker.UniversalPickerView;
-import com.bingor.poptipwindow.TipWindow;
 import com.bingor.poptipwindow.adapter.SimpleListAdapter;
 import com.bingor.poptipwindow.builder.CustomTipWindowBuilder;
 import com.bingor.poptipwindow.builder.ListTipWindowBuilder;
@@ -21,6 +18,9 @@ import com.bingor.poptipwindow.builder.UniversalPickerWindowBuilder;
 import com.bingor.poptipwindow.impl.OnDataSelectedListener;
 import com.bingor.poptipwindow.impl.OnItemClickListener;
 import com.bingor.poptipwindow.impl.OnWindowStateChangedListener;
+import com.bingor.poptipwindow.view.wheel.NumberWheelView;
+import com.bingor.poptipwindow.view.wheel.WheelItem;
+import com.bingor.poptipwindow.view.wheel.WheelView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -125,9 +125,17 @@ public class MainActivity extends AppCompatActivity {
                 TestBean tb_2a = new TestBean("2a");
                 TestBean tb_2b = new TestBean("2b");
                 TestBean tb_2c = new TestBean("2c");
+                TestBean tb_2d = new TestBean("2d");
+                TestBean tb_2e = new TestBean("2e");
+                TestBean tb_2f = new TestBean("2f");
+                TestBean tb_2g = new TestBean("2g");
                 d_2a.add(tb_2a);
                 d_2a.add(tb_2b);
                 d_2a.add(tb_2c);
+                d_2a.add(tb_2d);
+                d_2a.add(tb_2e);
+                d_2a.add(tb_2f);
+                d_2a.add(tb_2g);
                 tb_1a.setChildren(d_2a);
                 d_1.add(tb_1a);
 
@@ -135,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 TestBean tb_1b = new TestBean("1b");
                 List<TestBean> d_2b = new ArrayList();
                 // 第二层节点4
-                TestBean tb_2d = new TestBean("2d");
+                TestBean tb_2h = new TestBean("2h");
                 List<TestBean> d_3a = new ArrayList();
                 // 第三层节点12
                 TestBean tb_3a = new TestBean("3a");
@@ -151,8 +159,8 @@ public class MainActivity extends AppCompatActivity {
                 TestBean tb_1c = new TestBean("1c");
                 List<TestBean> d_2c = new ArrayList();
                 // 第二层节点56
-                TestBean tb_2e = new TestBean("2e");
-                TestBean tb_2f = new TestBean("2f");
+                TestBean tb_2i = new TestBean("2i");
+                TestBean tb_2j = new TestBean("2j");
                 List<TestBean> d_3b = new ArrayList();
                 // 第三层节点3
                 TestBean tb_3c = new TestBean("3c");
@@ -201,8 +209,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        NumberWheelView wheelView1 = findViewById(R.id.wv_test1);
+//        NumberWheelView wheelView2 = findViewById(R.id.wv_test2);
+//        NumberWheelView wheelView3 = findViewById(R.id.wv_test3);
+//        NumberWheelView wheelView4 = findViewById(R.id.wv_test4);
+//        NumberWheelView wheelView5 = findViewById(R.id.wv_test5);
+//        wheelView1.setItems(0, 999, 0);
+//        wheelView2.setItems(0, 999, 0);
+//        wheelView3.setItems(0, 999, 0);
+//        wheelView4.setItems(0, 999, 0);
+//        wheelView5.setItems(0, 999, 0);
 
-//        UniversalPickerView universalPickerView = findViewById(R.id.upv_test);
-//        universalPickerView.setDatas(d_1);
     }
 }

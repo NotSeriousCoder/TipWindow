@@ -30,9 +30,7 @@ public class DateTimePickerView extends FrameLayout {
     private View rootView, pageDate, pageTime;
     private TabLayout tab;
     private ViewPager pages;
-    private NumberPicker npDay, npHour, npMinute;
-    private WheelView npYear;
-    private WheelView2 npMonth;
+    private WheelView npYear, npMonth, npDay, npHour, npMinute;
 
     private List<View> pagesList;
 
@@ -63,44 +61,12 @@ public class DateTimePickerView extends FrameLayout {
         pagesList = new ArrayList<>();
 
         pagesList.add(pageDate);
-        TextView tv2 = new TextView(getContext());
-        tv2.setText("dswgfshtdh");
-        pagesList.add(tv2);
 
         pages.setAdapter(new DateTimePageAdapter());
 
-        initData();
     }
 
-    private void initData() {
-        initDateTime();
-    }
 
-    private void initDateTime() {
-
-//        npYear.setMaxValue(9999);
-//        npMonth.setMaxValue(12);
-        npDay.setMaxValue(31);
-//        npHour.setMaxValue(23);
-//        npMinute.setMaxValue(59);
-
-//        npYear.setMinValue(0);
-//        npMonth.setMinValue(1);
-        npDay.setMinValue(1);
-//        npHour.setMinValue(0);
-//        npMinute.setMinValue(0);
-
-//        npYear.setValue(dateTimeNow.getYear());
-//        npMonth.setValue(dateTimeNow.getMonth());
-//        npDay.setValue(dateTimeNow.getDay());
-//        npHour.setValue(dateTimeNow.getHour());
-//        npMinute.setValue(dateTimeNow.getMinute());
-
-//        setPickerMinMax();
-
-        initWheelView(npYear);
-        initWheelView2(npMonth);
-    }
 
     protected WheelView initWheelView(WheelView wheelView) {
         wheelView.setTextPadding(0);

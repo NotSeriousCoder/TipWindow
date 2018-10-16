@@ -137,12 +137,17 @@ public class TipWindow {
     private void initContent() {
         if (!TextUtils.isEmpty(textOK)) {
             tvOK.setText(textOK);
-            tvCancel.setVisibility(View.GONE);
-            okCancelPadding.setVisibility(View.GONE);
         }
         if (!TextUtils.isEmpty(textCancel)) {
             tvCancel.setText(textCancel);
+        }
+
+        if (TextUtils.isEmpty(textOK)) {
             tvOK.setVisibility(View.GONE);
+            okCancelPadding.setVisibility(View.GONE);
+        }
+        if (TextUtils.isEmpty(textCancel)) {
+            tvCancel.setVisibility(View.GONE);
             okCancelPadding.setVisibility(View.GONE);
         }
 

@@ -1,6 +1,7 @@
 package com.bingor.poptipwindow.impl
 
-import com.bingor.picker.datetimepickerdialog.wheel.WheelItem
+import com.bingor.poptipwindow.view.wheel.WheelItem
+
 
 /**
  * Created by HXB on 2018/10/15.
