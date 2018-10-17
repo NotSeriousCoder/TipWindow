@@ -58,7 +58,7 @@ public class NumberWheelView extends WheelView<Integer> {
     @Override
     public int getPositionByItem(Integer item) {
         for (int i = 0; i < items.size(); i++) {
-            if (items.get(i) == item) {
+            if (items.get(i).intValue() == item.intValue()) {
                 return i;
             }
         }

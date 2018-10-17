@@ -1,4 +1,4 @@
-package com.bingor.poptipwindow.view.datetimepicker;
+package com.bingor.poptipwindow.view.picker.datetimepicker;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 
 import com.bingor.poptipwindow.R;
 import com.bingor.poptipwindow.view.OnItemSelectListener;
+import com.bingor.poptipwindow.view.picker.Picker;
 import com.bingor.poptipwindow.view.wheel.NumberWheelView;
 import com.bingor.poptipwindow.view.wheel.WheelView;
 
@@ -24,7 +25,7 @@ import java.util.List;
 /**
  * Created by HXB on 2018/10/16.
  */
-public class DateTimePickerView extends LinearLayout {
+public class DateTimePickerView extends Picker {
     private long dateTimeStart;
     private long dateTimeEnd;
     private long dateTimeInit;

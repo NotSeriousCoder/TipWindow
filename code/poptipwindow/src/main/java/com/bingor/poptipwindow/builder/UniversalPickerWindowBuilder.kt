@@ -6,7 +6,7 @@ import android.support.annotation.FloatRange
 import android.support.annotation.IntRange
 import com.bingor.poptipwindow.impl.OnDataSelectedListener
 import com.bingor.poptipwindow.impl.OnWindowStateChangedListener
-import com.bingor.poptipwindow.view.universalpicker.UniversalPickerView
+import com.bingor.poptipwindow.view.picker.universalpicker.UniversalPickerView
 import com.bingor.poptipwindow.view.wheel.WheelItem
 
 /**

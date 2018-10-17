@@ -42,7 +42,7 @@
         app:text_size="10sp"
         app:ver_padding="15dp" />
 
-    <com.bingor.poptipwindow.view.datetimepicker.DateTimePickerView
+    <com.bingor.poptipwindow.view.picker.datetimepicker.DateTimePickerView
         android:id="@+id/upv_test"
         android:layout_width="match_parent"
         android:layout_height="200dp"

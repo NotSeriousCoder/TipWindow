@@ -1,4 +1,4 @@
-package com.bingor.poptipwindow.view.universalpicker;
+package com.bingor.poptipwindow.view.picker.universalpicker;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 
 import com.bingor.poptipwindow.R;
 import com.bingor.poptipwindow.util.FindDeepUtil;
+import com.bingor.poptipwindow.view.picker.Picker;
 import com.bingor.poptipwindow.view.wheel.UniversalWheelView;
 import com.bingor.poptipwindow.view.wheel.WheelView;
 import com.bingor.poptipwindow.view.OnItemSelectListener;
@@ -31,21 +32,7 @@ import java.util.List;
 /**
  * Created by HXB on 2018/10/12.
  */
-public class UniversalPickerView extends LinearLayout {
-    //竖向间距(2-4)
-    private int lineSpaceMultiplier;
-    //文字大小
-    private int textSize;
-    //旁边文字颜色 焦点文字颜色
-    private int textColorNormal, textColorFocus;
-    //分割线
-    private float dividerWidthRatio;
-    private int dividerColor;
-    //可见项数量
-    private int visibleItemCount;
-    //能否循环
-    private boolean cycleable;
-
+public class UniversalPickerView extends Picker {
     //数据
     private List<? extends WheelItem> datas;
     //定位
@@ -55,16 +42,6 @@ public class UniversalPickerView extends LinearLayout {
 
     public UniversalPickerView(@NonNull Context context) {
         super(context, null);
-        lineSpaceMultiplier = 2;
-        textSize = (int) (getContext().getResources().getDisplayMetrics().density * 14);
-        textColorNormal = Color.parseColor("#999999");
-        textColorFocus = Color.parseColor("#000000");
-        dividerWidthRatio = 1.0f;
-        dividerColor = Color.parseColor("#000000");
-        visibleItemCount = 3;
-        //能否循环
-        cycleable = true;
-        init();
     }
 
     public UniversalPickerView(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -73,25 +50,7 @@ public class UniversalPickerView extends LinearLayout {
 
     public UniversalPickerView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.Picker);
-        lineSpaceMultiplier = ta.getInteger(R.styleable.Picker_lineSpaceMultiplier, 2);
-        textSize = ta.getDimensionPixelSize(R.styleable.Picker_textSize, (int) (getContext().getResources().getDisplayMetrics().density * 14));
-        textColorNormal = ta.getColor(R.styleable.Picker_textColorNormal, Color.parseColor("#999999"));
-        textColorFocus = ta.getColor(R.styleable.Picker_textColorFocus, Color.parseColor("#000000"));
-        dividerWidthRatio = ta.getFloat(R.styleable.Picker_dividerWidthRatio, 1.0f);
-        dividerColor = ta.getColor(R.styleable.Picker_dividerColor, Color.parseColor("#000000"));
-        visibleItemCount = ta.getInteger(R.styleable.Picker_visibleItemCount, 3);
-        //能否循环
-        cycleable = ta.getBoolean(R.styleable.Picker_cycleable, true);
-
-        init();
     }
-
-    private void init() {
-        setOrientation(LinearLayout.HORIZONTAL);
-        setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-    }
-
 
     protected UniversalWheelView createABCUniversalPickerView() {
         UniversalWheelView wheelView = new UniversalWheelView(getContext());
@@ -135,8 +94,10 @@ public class UniversalPickerView extends LinearLayout {
                     for (int i = 0; i <= group; i++) {
                         //对应组的位置
                         int tempIndex = positions[i];
-                        wheelItem = children.get(tempIndex);
-                        children = wheelItem.getChildren();
+                        if (children.size() > tempIndex) {
+                            wheelItem = children.get(tempIndex);
+                            children = wheelItem.getChildren();
+                        }
                     }
                 } else {
                     children = null;
@@ -164,6 +125,7 @@ public class UniversalPickerView extends LinearLayout {
                     }
                 }
             }
+
         });
 //        wheelView.setItems(data);
 
@@ -207,78 +169,6 @@ public class UniversalPickerView extends LinearLayout {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public int getLineSpaceMultiplier() {
-        return lineSpaceMultiplier;
-    }
-
-    public UniversalPickerView setLineSpaceMultiplier(@IntRange(from = 2, to = 4) int lineSpaceMultiplier) {
-        this.lineSpaceMultiplier = lineSpaceMultiplier;
-        return this;
-    }
-
-    public int getTextSize() {
-        return textSize;
-    }
-
-    public UniversalPickerView setTextSize(int textSizePX) {
-        this.textSize = textSizePX;
-        return this;
-    }
-
-    public int getTextColorNormal() {
-        return textColorNormal;
-    }
-
-    public UniversalPickerView setTextColorNormal(@ColorInt int textColorNormal) {
-        this.textColorNormal = textColorNormal;
-        return this;
-    }
-
-    public int getTextColorFocus() {
-        return textColorFocus;
-    }
-
-    public UniversalPickerView setTextColorFocus(@ColorInt int textColorFocus) {
-        this.textColorFocus = textColorFocus;
-        return this;
-    }
-
-    public float getDividerWidthRatio() {
-        return dividerWidthRatio;
-    }
-
-    public UniversalPickerView setDividerWidthRatio(@FloatRange(from = 0, to = 1) float dividerWidthRatio) {
-        this.dividerWidthRatio = dividerWidthRatio;
-        return this;
-    }
-
-    public int getDividerColor() {
-        return dividerColor;
-    }
-
-    public UniversalPickerView setDividerColor(@ColorInt int dividerColor) {
-        this.dividerColor = dividerColor;
-        return this;
-    }
-
-    public int getVisibleItemCount() {
-        return visibleItemCount;
-    }
-
-    public UniversalPickerView setVisibleItemCount(int visibleItemCount) {
-        this.visibleItemCount = visibleItemCount;
-        return this;
-    }
-
-    public boolean isCycleable() {
-        return cycleable;
-    }
-
-    public UniversalPickerView setCycleable(boolean cycleable) {
-        this.cycleable = cycleable;
-        return this;
-    }
 
     public List<? extends WheelItem> getCurrentItems() {
         List<WheelItem> currentItems = new ArrayList<>();
