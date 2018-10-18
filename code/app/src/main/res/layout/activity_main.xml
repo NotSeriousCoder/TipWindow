@@ -45,7 +45,7 @@
     <com.bingor.poptipwindow.view.picker.datetimepicker.DateTimePickerView
         android:id="@+id/upv_test"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         app:cycleable="true"
         app:dividerColor="#551900"
         app:dividerWidthRatio="0.8"

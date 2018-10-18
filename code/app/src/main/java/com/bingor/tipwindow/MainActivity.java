@@ -18,6 +18,7 @@ import com.bingor.poptipwindow.builder.UniversalPickerWindowBuilder;
 import com.bingor.poptipwindow.impl.OnDataSelectedListener;
 import com.bingor.poptipwindow.impl.OnItemClickListener;
 import com.bingor.poptipwindow.impl.OnWindowStateChangedListener;
+import com.bingor.poptipwindow.view.picker.datetimepicker.DateTimePickerView;
 import com.bingor.poptipwindow.view.wheel.NumberWheelView;
 import com.bingor.poptipwindow.view.wheel.WheelItem;
 import com.bingor.poptipwindow.view.wheel.WheelView;
@@ -220,5 +221,8 @@ public class MainActivity extends AppCompatActivity {
 //        wheelView4.setItems(0, 999, 0);
 //        wheelView5.setItems(0, 999, 0);
 
+        DateTimePickerView dateTimePickerView = findViewById(R.id.upv_test);
+        dateTimePickerView.setDateTimeStart(1995, 1, 5, 10, 10)
+                .setDateTimeEnd(2000, 1, 5, 10, 10);
     }
 }

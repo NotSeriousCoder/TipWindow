@@ -20,7 +20,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="16dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:tag="0" />
 
 
         <com.bingor.poptipwindow.view.wheel.NumberWheelView
@@ -28,14 +29,16 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="16dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:tag="1" />
 
 
         <com.bingor.poptipwindow.view.wheel.NumberWheelView
             android:id="@+id/np_m_view_date_time_picker_page_date_p_day"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:tag="2" />
 
     </LinearLayout>
 

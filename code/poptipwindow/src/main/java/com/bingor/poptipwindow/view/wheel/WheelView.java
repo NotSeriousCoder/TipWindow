@@ -95,6 +95,7 @@ public abstract class WheelView<DataType> extends View {
     protected float centerContentOffset;//偏移量
     protected boolean useWeight = false;//使用比重还是包裹内容？
     protected boolean textSizeAutoFit = true;//条目内容过长时是否自动减少字号来适配
+    protected boolean isRolling = false;
 
     public WheelView(Context context) {
         this(context, null);
@@ -934,12 +935,15 @@ public abstract class WheelView<DataType> extends View {
         public final void handleMessage(Message msg) {
             switch (msg.what) {
                 case WHAT_INVALIDATE:
+                    view.isRolling = true;
                     view.invalidate();
                     break;
                 case WHAT_SMOOTH_SCROLL:
+                    view.isRolling = true;
                     view.smoothScroll(WheelView.ACTION_FLING);
                     break;
                 case WHAT_ITEM_SELECTED:
+                    view.isRolling = false;
                     view.itemSelectedCallback();
                     break;
             }
@@ -1091,14 +1095,21 @@ public abstract class WheelView<DataType> extends View {
      */
     public abstract int getPositionByItem(DataType item);
 
+    public abstract DataType getCurrentItem();
+
+    public abstract DataType getItem(int position);
+
     //    public final void setItems(List<?> items) {
 //        //.......
 //        remeasure();
 //        invalidate();
 //    }
 
-//    public final void setItems(List<?> items, int index) {
+    //    public final void setItems(List<?> items, int index) {
 //        //........
 //        setSelectedIndex(index);
 //    }
+    public boolean isRolling() {
+        return isRolling;
+    }
 }

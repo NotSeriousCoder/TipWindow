@@ -32,6 +32,7 @@ public class NumberWheelView extends WheelView<Integer> {
     }
 
     public void setItems(int startNum, int endNum, int defaultNum) {
+        items.clear();
         for (int i = startNum; i <= endNum; i++) {
             items.add(i);
         }
@@ -63,5 +64,15 @@ public class NumberWheelView extends WheelView<Integer> {
             }
         }
         return -1;
+    }
+
+    @Override
+    public Integer getCurrentItem() {
+        return getItem(selectedIndex);
+    }
+
+    @Override
+    public Integer getItem(int position) {
+        return items.get(position);
     }
 }

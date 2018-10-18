@@ -27,7 +27,9 @@ import com.bingor.poptipwindow.view.OnItemSelectListener;
 import com.bingor.poptipwindow.view.wheel.WheelItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by HXB on 2018/10/12.
@@ -39,6 +41,8 @@ public class UniversalPickerView extends Picker {
     private int[] positions = {0, 0, 0, 0};
     //深度
     private int deep;
+    Map<Integer, Integer> needChangeWheels = new HashMap<>();
+
 
     public UniversalPickerView(@NonNull Context context) {
         super(context, null);
@@ -52,14 +56,13 @@ public class UniversalPickerView extends Picker {
         super(context, attrs, defStyleAttr);
     }
 
-    protected UniversalWheelView createABCUniversalPickerView() {
+    protected UniversalWheelView createWheelView() {
         UniversalWheelView wheelView = new UniversalWheelView(getContext());
 
         LayoutParams lp = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         lp.weight = 1;
         lp.gravity = Gravity.CENTER;
         wheelView.setLayoutParams(lp);
-
 
         wheelView.setTextPadding(0);
         wheelView.setUseWeight(true);
@@ -82,10 +85,40 @@ public class UniversalPickerView extends Picker {
         wheelView.setOnItemSelectListener(new OnItemSelectListener<WheelItem>() {
             @Override
             public <View extends WheelView> void onSelected(View wheelView, int index, WheelItem item) {
-                Log.d("HXB", "index == " + index);
+                Log.d("HXB", "wheelView==" + wheelView.getTag() + "  isRolling==" + wheelView.isRolling());
                 //滚轮组别
                 int group = (int) wheelView.getTag();
+
+                for (int i = 0; i < getChildCount(); i++) {
+                    WheelView child = (WheelView) getChildAt(i);
+                    if (child.isRolling()) {
+                        Log.d("HXB", "group==" + group + "  index==" + index);
+                        needChangeWheels.put(group, index);
+                        return;
+                    }
+                }
+                if (!needChangeWheels.isEmpty()) {
+                    Log.d("HXB", "needChangeWheels==" + needChangeWheels.size());
+                    int tempGroup = 10000;
+                    for (int key : needChangeWheels.keySet()) {
+                        Log.d("HXB", "key==" + key + "  value==" + needChangeWheels.get(key));
+                        if (needChangeWheels.get(key).intValue() < tempGroup) {
+                            tempGroup = key;
+                        }
+                    }
+
+                    if (group > tempGroup) {
+                        group = tempGroup;
+                        index = needChangeWheels.get(group);
+                    }
+                    needChangeWheels.clear();
+                }
+
+
                 positions[group] = index;
+                Log.d("HXB", "最终移动的组==" + group);
+
+
                 //某组当前项
                 WheelItem wheelItem;
                 //该项的子列表
@@ -94,7 +127,7 @@ public class UniversalPickerView extends Picker {
                     for (int i = 0; i <= group; i++) {
                         //对应组的位置
                         int tempIndex = positions[i];
-                        if (children.size() > tempIndex) {
+                        if (children != null && children.size() > tempIndex) {
                             wheelItem = children.get(tempIndex);
                             children = wheelItem.getChildren();
                         }
@@ -108,7 +141,7 @@ public class UniversalPickerView extends Picker {
                         nextABCUniversalPickerView = (UniversalWheelView) getChildAt(group + 1);
                         nextABCUniversalPickerView.setVisibility(VISIBLE);
                     } else {
-                        nextABCUniversalPickerView = createABCUniversalPickerView();
+                        nextABCUniversalPickerView = createWheelView();
                         addView(nextABCUniversalPickerView);
                     }
                     if (!cycleable || children.size() < 4) {
@@ -124,6 +157,53 @@ public class UniversalPickerView extends Picker {
                         getChildAt(i).setVisibility(GONE);
                     }
                 }
+
+
+//                new Handler() {
+//                    @Override
+//                    public void handleMessage(Message msg) {
+//                        super.handleMessage(msg);
+//                        Log.d("HXB", "Handler run");
+//                        //某组当前项
+//                        WheelItem wheelItem;
+//                        //该项的子列表
+//                        List<? extends WheelItem> children = datas;
+//                        if (msg.what < 3) {
+//                            for (int i = 0; i <= msg.what; i++) {
+//                                //对应组的位置
+//                                int tempIndex = positions[i];
+//                                if (children != null && children.size() > tempIndex) {
+//                                    wheelItem = children.get(tempIndex);
+//                                    children = wheelItem.getChildren();
+//                                }
+//                            }
+//                        } else {
+//                            children = null;
+//                        }
+//                        if (children != null) {
+//                            UniversalWheelView nextABCUniversalPickerView;
+//                            if (getChildCount() > msg.what + 1) {
+//                                nextABCUniversalPickerView = (UniversalWheelView) getChildAt(msg.what + 1);
+//                                nextABCUniversalPickerView.setVisibility(VISIBLE);
+//                            } else {
+//                                nextABCUniversalPickerView = createWheelView();
+//                                addView(nextABCUniversalPickerView);
+//                            }
+//                            if (!cycleable || children.size() < 4) {
+//                                nextABCUniversalPickerView.setCycleable(false);
+//                            } else {
+//                                nextABCUniversalPickerView.setCycleable(true);
+//                            }
+//                            nextABCUniversalPickerView.setTag(msg.what + 1);
+//                            nextABCUniversalPickerView.setItems(children);
+//                            nextABCUniversalPickerView.setSelectedIndex(0);
+//                        } else {
+//                            for (int i = msg.what + 1; i < getChildCount(); i++) {
+//                                getChildAt(i).setVisibility(GONE);
+//                            }
+//                        }
+//                    }
+//                }.sendEmptyMessageDelayed(group, 300);
             }
 
         });
@@ -133,7 +213,7 @@ public class UniversalPickerView extends Picker {
     }
 
     protected void initWheel() {
-        UniversalWheelView wheelView = createABCUniversalPickerView();
+        UniversalWheelView wheelView = createWheelView();
         if (!cycleable || datas.size() < 4) {
             wheelView.setCycleable(false);
         } else {

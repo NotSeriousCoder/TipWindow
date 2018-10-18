@@ -51,6 +51,16 @@ public class UniversalWheelView<T extends WheelItem> extends WheelView<T> {
     }
 
     @Override
+    public T getCurrentItem() {
+        return getItem(selectedIndex);
+    }
+
+    @Override
+    public T getItem(int position) {
+        return items.get(position);
+    }
+
+    @Override
     public int getPositionByItem(WheelItem item) {
         return getPositionByItemContent(item.getName());
     }
