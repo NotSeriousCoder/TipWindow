@@ -222,7 +222,9 @@ public class MainActivity extends AppCompatActivity {
 //        wheelView5.setItems(0, 999, 0);
 
         DateTimePickerView dateTimePickerView = findViewById(R.id.upv_test);
-        dateTimePickerView.setDateTimeStart(1995, 1, 5, 10, 10)
-                .setDateTimeEnd(2000, 1, 5, 10, 10);
+        dateTimePickerView
+                .setDateTimeStart(1995, 3, 8, 10, 30)
+                .setDateTimeEnd(2000, 1, 15, 11, 10)
+                .initDateTime();
     }
 }

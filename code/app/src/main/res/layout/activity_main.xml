@@ -50,6 +50,7 @@
         app:dividerColor="#551900"
         app:dividerWidthRatio="0.8"
         app:lineSpaceMultiplier="2"
+        app:tabIndicatorColor="#112233"
         app:textColorFocus="#1155dd"
         app:textColorNormal="#a3dd12"
         app:textSize="16sp"

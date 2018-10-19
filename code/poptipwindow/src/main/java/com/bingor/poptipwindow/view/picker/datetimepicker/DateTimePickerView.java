@@ -1,6 +1,7 @@
 package com.bingor.poptipwindow.view.picker.datetimepicker;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import com.bingor.poptipwindow.R;
 import com.bingor.poptipwindow.util.DateTimeUtil;
 import com.bingor.poptipwindow.view.OnItemSelectListener;
+import com.bingor.poptipwindow.view.data.DateTimeInfo;
 import com.bingor.poptipwindow.view.picker.Picker;
 import com.bingor.poptipwindow.view.wheel.NumberWheelView;
 import com.bingor.poptipwindow.view.wheel.WheelView;
@@ -31,18 +33,14 @@ import java.util.Map;
  * Created by HXB on 2018/10/16.
  */
 public class DateTimePickerView extends Picker {
-    private long dateTimeStart;
-    private long dateTimeEnd;
-    private long dateTimeInit;
-    private long dateTimeSelect;
+    private DateTimeInfo dateTimeStart, dateTimeEnd, dateTimeInit, dateTimeSelect;
 
     private View rootView, pageDate, pageTime;
     private TabLayout tab;
     private ViewPager pages;
     private NumberWheelView npYear, npMonth, npDay, npHour, npMinute;
     private List<View> pagesList;
-    private Map<Integer, Integer> needChangeWheels = new HashMap<>();
-
+    private DateTimePageAdapter adapter;
 
     public DateTimePickerView(Context context) {
         this(context, null);
@@ -54,6 +52,54 @@ public class DateTimePickerView extends Picker {
 
     public DateTimePickerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        for (int i = 0, size = attrs.getAttributeCount(); i < size; i++) {
+            String name = attrs.getAttributeName(i);
+            String value = attrs.getAttributeValue(i);
+            if ("tabIndicatorColor".equals(name) || "tabSelectedTextColor".equals(name) || "tabTextColor".equals(name)) {
+                tab.setSelectedTabIndicatorColor();
+                if (value.startsWith("@")) {
+                    int bgResId = Integer.parseInt(value.substring(1));
+                    setBackgroundResource(bgResId);
+//                    rootView.findViewById(R.id.ll_main).setBackgroundResource(bgResId);
+                } else if (value.startsWith("#")) {
+                    String alphaStr = null;
+                    String colorStr = null;
+                    if (value.length() == 9) {
+                        alphaStr = value.substring(1, 3);
+                        colorStr = value.substring(3);
+                    } else if (value.length() <= 7) {
+                        colorStr = value.substring(1);
+                    }
+                    if (colorStr != null) {
+                        try {
+                            int color = Integer.parseInt(colorStr, 16);
+                            setBackgroundColor(color);
+//                            rootView.findViewById(R.id.ll_main).setBackgroundColor(color);
+                        } catch (NumberFormatException e) {
+
+                        }
+                    }
+
+                    if (alphaStr != null && Build.VERSION.SDK_INT >= 11) {
+                        try {
+                            int alpha = Integer.parseInt(alphaStr, 16);
+                            setAlpha(alpha);
+//                            rootView.findViewById(R.id.ll_main).setAlpha(alpha);
+                        } catch (NumberFormatException e) {
+
+                        }
+                    }
+
+                }
+            }
+        }
+
+//        app:tabIndicatorColor="#ffff11"
+//        app:tabSelectedTextColor="#3a9155"
+//        app:tabTextColor="#000000"
+
+
         initView();
         initData();
         initListener();
@@ -103,94 +149,142 @@ public class DateTimePickerView extends Picker {
         numberWheelView.setCycleable(cycleable);
     }
 
-
     private void initData() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(1000, 0, 1, 0, 0);
-        dateTimeStart = calendar.getTimeInMillis();
-        calendar.set(5000, 11, 31, 23, 59);
-        dateTimeEnd = calendar.getTimeInMillis();
-        dateTimeInit = System.currentTimeMillis();
+        dateTimeStart = new DateTimeInfo(1, 1, 1, 0, 0);
+        dateTimeEnd = new DateTimeInfo(9999, 12, 31, 23, 59);
+        dateTimeInit = new DateTimeInfo(System.currentTimeMillis());
+        dateTimeSelect = new DateTimeInfo(dateTimeInit.timeMillis);
 
         pagesList = new ArrayList<>();
         pagesList.add(pageDate);
         pagesList.add(pageTime);
-        pages.setAdapter(new DateTimePageAdapter());
+        adapter = new DateTimePageAdapter();
+        pages.setAdapter(adapter);
 
 
-        calendar.setTimeInMillis(dateTimeInit);
-        npYear.setItems(0, 9999, calendar.get(Calendar.YEAR));
-        npMonth.setItems(1, 12, calendar.get(Calendar.MONTH) + 1);
-        npDay.setItems(1, 31, calendar.get(Calendar.DAY_OF_MONTH));
-        npHour.setItems(0, 23, calendar.get(Calendar.HOUR_OF_DAY));
-        npMinute.setItems(0, 59, calendar.get(Calendar.MINUTE));
+        npYear.setItems(dateTimeStart.year, dateTimeEnd.year, dateTimeInit.year);
+        npMonth.setItems(dateTimeStart.month, dateTimeEnd.month, dateTimeInit.month);
+        npDay.setItems(dateTimeStart.day, dateTimeEnd.day, dateTimeInit.day);
+        npHour.setItems(dateTimeStart.hour, dateTimeEnd.hour, dateTimeInit.hour);
+        npMinute.setItems(dateTimeStart.minute, dateTimeEnd.minute, dateTimeInit.minute);
     }
 
     private void initListener() {
-        npYear.setOnItemSelectListener(new OnNumberchanged());
-        npMonth.setOnItemSelectListener(new OnNumberchanged());
-        npDay.setOnItemSelectListener(new OnNumberchanged());
-        npHour.setOnItemSelectListener(new OnNumberchanged());
-        npMinute.setOnItemSelectListener(new OnNumberchanged());
-    }
+        npYear.setOnItemSelectListener(new OnItemSelectListener<Integer>() {
+            @Override
+            public void onSelected(WheelView wheelView, int index, Integer item) {
+                dateTimeSelect.setYear(item);
+                if (dateTimeSelect.timeMillis < dateTimeStart.timeMillis || dateTimeSelect.timeMillis > dateTimeEnd.timeMillis) {
+                    if (dateTimeSelect.timeMillis < dateTimeStart.timeMillis) {
+                        Log.d("HXB", "太小");
+                        dateTimeSelect.setTimeMillis(dateTimeStart.timeMillis);
+                    } else if (dateTimeSelect.timeMillis > dateTimeEnd.timeMillis) {
+                        Log.d("HXB", "太大");
+                        dateTimeSelect.setTimeMillis(dateTimeEnd.timeMillis);
+                    }
+                    npMonth.stop();
+                    npDay.stop();
+                    npHour.stop();
+                    npMinute.stop();
 
-    private long getCurrentDateTimeLong() {
-        Calendar calendar = Calendar.getInstance();
-//        calendar.set((Integer) npYear.getCurrentItem(),
-//                (Integer) npMonth.getCurrentItem(),
-//                (Integer) npDay.getCurrentItem(),
-//                (Integer) npHour.getCurrentItem(),
-//                (Integer) npMinute.getCurrentItem());
-        return calendar.getTimeInMillis();
-    }
+                    Log.d("HXB", "结束日期==" + dateTimeEnd.year + "," + dateTimeEnd.month + "," + dateTimeEnd.day + "," + dateTimeEnd.hour + "," + dateTimeEnd.minute);
+                    Log.d("HXB", "重置后的日期==" + dateTimeSelect.year + "," + dateTimeSelect.month + "," + dateTimeSelect.day + "," + dateTimeSelect.hour + "," + dateTimeSelect.minute);
+                    npMonth.setSelectedIndex(npMonth.getPositionByItem(dateTimeSelect.month));
+                    npDay.setSelectedIndex(npDay.getPositionByItem(dateTimeSelect.day));
+                    npHour.setSelectedIndex(npHour.getPositionByItem(dateTimeSelect.hour));
+                    npMinute.setSelectedIndex(npMinute.getPositionByItem(dateTimeSelect.minute));
+                } else {
+                    int rightDays = DateTimeUtil.getDaysOfMonth(dateTimeSelect.year, dateTimeSelect.month);
+                    if (npDay.getItemCount() != rightDays) {
+                        npDay.stop();
+                        npDay.setItems(1, rightDays, dateTimeSelect.day);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+        npMonth.setOnItemSelectListener(new OnItemSelectListener<Integer>() {
+            @Override
+            public void onSelected(WheelView wheelView, int index, Integer item) {
+                dateTimeSelect.setMonth(item);
+                if (dateTimeSelect.timeMillis < dateTimeStart.timeMillis || dateTimeSelect.timeMillis > dateTimeEnd.timeMillis) {
+                    if (dateTimeSelect.timeMillis < dateTimeStart.timeMillis) {
+                        dateTimeSelect.setTimeMillis(dateTimeStart.timeMillis);
+                    } else if (dateTimeSelect.timeMillis > dateTimeEnd.timeMillis) {
+                        dateTimeSelect.setTimeMillis(dateTimeEnd.timeMillis);
+                    }
+                    npDay.stop();
+                    npHour.stop();
+                    npMinute.stop();
 
-//    public final void goStart() {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(dateTimeStart);
-//        npYear.setSelectedIndex();
-//        npMonth.setOnItemSelectListener(onItemSelectListener);
-//        npDay.setOnItemSelectListener(onItemSelectListener);
-//        npHour.setOnItemSelectListener(onItemSelectListener);
-//        npMinute.setOnItemSelectListener(onItemSelectListener);
-//    }
+                    npMonth.setSelectedIndex(npMonth.getPositionByItem(dateTimeSelect.month));
+                    npDay.setSelectedIndex(npDay.getPositionByItem(dateTimeSelect.day));
+                    npHour.setSelectedIndex(npHour.getPositionByItem(dateTimeSelect.hour));
+                    npMinute.setSelectedIndex(npMinute.getPositionByItem(dateTimeSelect.minute));
+                } else {
+                    int rightDays = DateTimeUtil.getDaysOfMonth(dateTimeSelect.year, dateTimeSelect.month);
+                    if (npDay.getItemCount() != rightDays) {
+                        npDay.stop();
+                        npDay.setItems(1, rightDays, dateTimeSelect.day);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+        npDay.setOnItemSelectListener(new OnItemSelectListener<Integer>() {
+            @Override
+            public void onSelected(WheelView wheelView, int index, Integer item) {
+                dateTimeSelect.setDay(item);
+                if (dateTimeSelect.timeMillis < dateTimeStart.timeMillis || dateTimeSelect.timeMillis > dateTimeEnd.timeMillis) {
+                    if (dateTimeSelect.timeMillis < dateTimeStart.timeMillis) {
+                        dateTimeSelect.setTimeMillis(dateTimeStart.timeMillis);
+                    } else if (dateTimeSelect.timeMillis > dateTimeEnd.timeMillis) {
+                        dateTimeSelect.setTimeMillis(dateTimeEnd.timeMillis);
+                    }
+                    npHour.stop();
+                    npMinute.stop();
 
-    public final void goPrevious() {
-    }
+                    npDay.setSelectedIndex(npDay.getPositionByItem(dateTimeSelect.day));
+                    npHour.setSelectedIndex(npHour.getPositionByItem(dateTimeSelect.hour));
+                    npMinute.setSelectedIndex(npMinute.getPositionByItem(dateTimeSelect.minute));
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+        npHour.setOnItemSelectListener(new OnItemSelectListener<Integer>() {
+            @Override
+            public void onSelected(WheelView wheelView, int index, Integer item) {
+                dateTimeSelect.setHour(item);
+                if (dateTimeSelect.timeMillis < dateTimeStart.timeMillis || dateTimeSelect.timeMillis > dateTimeEnd.timeMillis) {
+                    if (dateTimeSelect.timeMillis < dateTimeStart.timeMillis) {
+                        dateTimeSelect.setTimeMillis(dateTimeStart.timeMillis);
+                    } else if (dateTimeSelect.timeMillis > dateTimeEnd.timeMillis) {
+                        dateTimeSelect.setTimeMillis(dateTimeEnd.timeMillis);
+                    }
+                    npMinute.stop();
 
-    private void initDateTime(long start, long end, long now) {
-        dateTimeStart = start;
-        dateTimeEnd = end;
-        dateTimeInit = now;
+                    npHour.setSelectedIndex(npHour.getPositionByItem(dateTimeSelect.hour));
+                    npMinute.setSelectedIndex(npMinute.getPositionByItem(dateTimeSelect.minute));
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+        npMinute.setOnItemSelectListener(new OnItemSelectListener<Integer>() {
+            @Override
+            public void onSelected(WheelView wheelView, int index, Integer item) {
+                dateTimeSelect.setMinute(item);
+                if (dateTimeSelect.timeMillis < dateTimeStart.timeMillis || dateTimeSelect.timeMillis > dateTimeEnd.timeMillis) {
+                    if (dateTimeSelect.timeMillis < dateTimeStart.timeMillis) {
+                        dateTimeSelect.setTimeMillis(dateTimeStart.timeMillis);
+                    } else if (dateTimeSelect.timeMillis > dateTimeEnd.timeMillis) {
+                        dateTimeSelect.setTimeMillis(dateTimeEnd.timeMillis);
+                    }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(dateTimeStart);
-        int yearStart = calendar.get(Calendar.YEAR);
-        int monthStart = calendar.get(Calendar.MONTH) + 1;
-        int dayStart = calendar.get(Calendar.DAY_OF_MONTH);
-        int hourStart = calendar.get(Calendar.HOUR_OF_DAY);
-        int minuteStart = calendar.get(Calendar.MINUTE);
-
-        calendar.setTimeInMillis(dateTimeEnd);
-        int yearEnd = calendar.get(Calendar.YEAR);
-        int monthEnd = calendar.get(Calendar.MONTH) + 1;
-        int dayEnd = calendar.get(Calendar.DAY_OF_MONTH);
-        int hourEnd = calendar.get(Calendar.HOUR_OF_DAY);
-        int minuteEnd = calendar.get(Calendar.MINUTE);
-
-        calendar.setTimeInMillis(dateTimeSelect);
-        int yearNow = calendar.get(Calendar.YEAR);
-        int monthNow = calendar.get(Calendar.MONTH) + 1;
-        int dayNow = calendar.get(Calendar.DAY_OF_MONTH);
-        int hourNow = calendar.get(Calendar.HOUR_OF_DAY);
-        int minuteNow = calendar.get(Calendar.MINUTE);
-
-        int rightDays = DateTimeUtil.getDaysOfMonth(yearNow,monthNow);
-
-        npMinute.setItems(0, 59, minuteNow);
-        npHour.setItems(0, 23, hourNow);
-        npDay.setItems(1, rightDays, dayNow);
-        npMonth.setItems(1, 12, monthNow);
-        npYear.setItems(yearStart, yearEnd, yearNow);
+                    npMinute.setSelectedIndex(npMinute.getPositionByItem(dateTimeSelect.minute));
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private class DateTimePageAdapter extends PagerAdapter {
@@ -216,15 +310,13 @@ public class DateTimePickerView extends Picker {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            SimpleDateFormat format = new SimpleDateFormat();
-//            if (position == 0 && needDate) {
-//                format.applyPattern(formatDate);
-//                return format.format(dateTimeNow.getDateTime().getTime());
-//            } else {
-//                format.applyPattern(formatTime);
-//                return format.format(dateTimeNow.getDateTime().getTime());
-//            }
-            return position + "";
+            String title;
+            if (position == 0) {
+                title = dateTimeSelect.year + "-" + dateTimeSelect.month + "-" + dateTimeSelect.day;
+            } else {
+                title = dateTimeSelect.hour + ":" + dateTimeSelect.minute;
+            }
+            return title;
         }
 
         @Override
@@ -234,133 +326,43 @@ public class DateTimePickerView extends Picker {
         }
     }
 
-    private class OnNumberchanged implements OnItemSelectListener<Integer> {
-        boolean noLinkage = false;
-
-        @Override
-        public <T extends WheelView> void onSelected(T wheelView, int index, Integer item) {
-            if (noLinkage) {
-                noLinkage = false;
-                return;
-            }
-            int group = Integer.parseInt((String) wheelView.getTag());
-
-            if (npYear.isRolling() || npMonth.isRolling() || npDay.isRolling() || npHour.isRolling() || npMinute.isRolling()) {
-                return;
-            }
-//            for (int i = 0; i < getChildCount(); i++) {
-//                WheelView child = (WheelView) getChildAt(i);
-//                if (child.isRolling()) {
-//                    Log.d("HXB", "group==" + group + "  index==" + index);
-//                    needChangeWheels.put(group, index);
-//                    return;
-//                }
-//            }
-
-            //该月正确天数
-            int rightDays = DateTimeUtil.getDaysOfMonth(npYear.getCurrentItem(), npMonth.getCurrentItem());
-            //当前几号
-            int currentDay = npDay.getCurrentItem();
-            if (currentDay > rightDays) {
-                noLinkage = true;
-                npDay.setItems(1, rightDays, rightDays);
-            }
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(npYear.getCurrentItem(), npMonth.getCurrentItem() - 1, npDay.getCurrentItem(), npHour.getCurrentItem(), npMinute.getCurrentItem());
-            if (calendar.getTimeInMillis() > dateTimeEnd) {
-                calendar.setTimeInMillis(dateTimeEnd);
-            } else if (calendar.getTimeInMillis() < dateTimeStart) {
-                calendar.setTimeInMillis(dateTimeStart);
-            } else {
-
-            }
-
-//            if (!needChangeWheels.isEmpty()) {
-//                Log.d("HXB", "needChangeWheels==" + needChangeWheels.size());
-//                int tempGroup = 10000;
-//                for (int key : needChangeWheels.keySet()) {
-//                    Log.d("HXB", "key==" + key + "  value==" + needChangeWheels.get(key));
-//                    if (needChangeWheels.get(key).intValue() < tempGroup) {
-//                        tempGroup = key;
-//                    }
-//                }
-//
-//                if (group > tempGroup) {
-//                    group = tempGroup;
-//                    index = needChangeWheels.get(group);
-//                }
-//                needChangeWheels.clear();
-//            }
-
-
-        }
-    }
-
-
-    /////////////////////////////////////////////////////////////////////////////
-
-    public long getDateTimeStart() {
-        return dateTimeStart;
-    }
-
     public DateTimePickerView setDateTimeStart(int year, int month, int day, int hour, int minute) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day, hour, minute);
-        setDateTimeStart(calendar.getTimeInMillis());
+        dateTimeStart.setDateTime(year, month, day, hour, minute);
         return this;
     }
 
-    public DateTimePickerView setDateTimeStart(long dateTimeStart) {
-        initDateTime(dateTimeStart, dateTimeEnd, dateTimeInit);
+    public DateTimePickerView setDateTimeStart(int dateTimeStartMillis) {
+        dateTimeStart.setTimeMillis(dateTimeStartMillis);
         return this;
-    }
-
-    public long getDateTimeEnd() {
-        return dateTimeEnd;
     }
 
     public DateTimePickerView setDateTimeEnd(int year, int month, int day, int hour, int minute) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day, hour, minute);
-        setDateTimeEnd(calendar.getTimeInMillis());
+        dateTimeEnd.setDateTime(year, month, day, hour, minute);
         return this;
     }
 
-    public DateTimePickerView setDateTimeEnd(long dateTimeEnd) {
-        initDateTime(dateTimeStart, dateTimeEnd, dateTimeInit);
+    public DateTimePickerView setDateTimeEnd(long dateTimeEndMillis) {
+        dateTimeEnd.setTimeMillis(dateTimeEndMillis);
         return this;
-    }
-
-    public long getDateTimeInit() {
-        return dateTimeInit;
     }
 
     public DateTimePickerView setDateTimeInit(int year, int month, int day, int hour, int minute) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day, hour, minute);
-        setDateTimeInit(calendar.getTimeInMillis());
+        dateTimeInit.setDateTime(year, month, day, hour, minute);
         return this;
     }
 
-    public DateTimePickerView setDateTimeInit(long dateTimeInit) {
-        initDateTime(dateTimeStart, dateTimeEnd, dateTimeInit);
+    public DateTimePickerView setDateTimeInit(long dateTimeInitMillis) {
+        dateTimeInit.setTimeMillis(dateTimeInitMillis);
         return this;
     }
 
-    public long getDateTimeSelect() {
-        return dateTimeSelect;
+    public void initDateTime() {
+        dateTimeSelect.setTimeMillis(dateTimeInit.timeMillis);
+        npYear.setItems(dateTimeStart.year, dateTimeEnd.year, dateTimeInit.year);
+        npMonth.setItems(1, 12, dateTimeInit.month);
+        npDay.setItems(1, 30, dateTimeInit.day);
+        npHour.setItems(0, 23, dateTimeInit.hour);
+        npMinute.setItems(0, 59, dateTimeInit.minute);
     }
 
-    public DateTimePickerView setDateTimeSelect(int year, int month, int day, int hour, int minute) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day, hour, minute);
-        setDateTimeSelect(calendar.getTimeInMillis());
-        return this;
-    }
-
-    public DateTimePickerView setDateTimeSelect(long dateTimeSelect) {
-        this.dateTimeSelect = dateTimeSelect;
-        return this;
-    }
 }

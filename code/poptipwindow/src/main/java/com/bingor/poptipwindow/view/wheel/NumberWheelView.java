@@ -26,6 +26,7 @@ public class NumberWheelView extends WheelView<Integer> {
     public void setItems(List<Integer> items, int defaultPosition) {
         this.items.clear();
         this.items.addAll(items);
+        stop = false;
         remeasure();
         invalidate();
         setSelectedIndex(defaultPosition);
@@ -36,6 +37,7 @@ public class NumberWheelView extends WheelView<Integer> {
         for (int i = startNum; i <= endNum; i++) {
             items.add(i);
         }
+        stop = false;
         remeasure();
         invalidate();
         setSelectedIndex(defaultNum - startNum);

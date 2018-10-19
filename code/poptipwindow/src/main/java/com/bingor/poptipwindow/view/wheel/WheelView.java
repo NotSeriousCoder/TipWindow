@@ -13,6 +13,7 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -96,6 +97,8 @@ public abstract class WheelView<DataType> extends View {
     protected boolean useWeight = false;//使用比重还是包裹内容？
     protected boolean textSizeAutoFit = true;//条目内容过长时是否自动减少字号来适配
     protected boolean isRolling = false;
+    protected boolean stop = false;
+    protected InertiaTimerTask command;
 
     public WheelView(Context context) {
         this(context, null);
@@ -160,6 +163,7 @@ public abstract class WheelView<DataType> extends View {
 
     public final void setSelectedIndex(int index) {
         if (items == null || items.isEmpty()) {
+            Log.d("HXB", "items 为空，退出");
             return;
         }
         int size = items.size();
@@ -167,6 +171,7 @@ public abstract class WheelView<DataType> extends View {
             initPosition = index;
             totalScrollY = 0;//回归顶部，不然重设索引的话位置会偏移，就会显示出不对位置的数据
             offset = 0;
+            Log.d("HXB", "去重绘");
             invalidate();
         }
         itemSelectedCallback();
@@ -340,7 +345,7 @@ public abstract class WheelView<DataType> extends View {
      * 重新测量
      */
     protected void remeasure() {
-        if (items == null) {
+        if (items == null /*|| stop*/) {
             return;
         }
         measureTextHeight();
@@ -387,6 +392,9 @@ public abstract class WheelView<DataType> extends View {
      * 计算最大length的Text的宽度
      */
     private void measureTextWidth() {
+       /* if (stop) {
+            return;
+        }*/
         Rect rect = new Rect();
         int size = items.size();
         int low = size < 200 ? 0 : size - 100;
@@ -431,7 +439,7 @@ public abstract class WheelView<DataType> extends View {
      */
     protected void scrollBy(float velocityY) {
         cancelFuture();
-        InertiaTimerTask command = new InertiaTimerTask(this, velocityY);
+        command = new InertiaTimerTask(this, velocityY);
         mFuture = Executors.newSingleThreadScheduledExecutor()
                 .scheduleWithFixedDelay(command, 0, VELOCITY_FLING, TimeUnit.MILLISECONDS);
     }
@@ -444,13 +452,15 @@ public abstract class WheelView<DataType> extends View {
     }
 
     protected void itemSelectedCallback() {
-        if (onItemSelectListener == null) {
+        Log.d("HXB", "stop=="+stop);
+
+        if (onItemSelectListener == null || stop) {
             return;
         }
         postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (onItemSelectListener != null) {
+                if (onItemSelectListener != null && !stop) {
                     onItemSelectListener.onSelected(WheelView.this, selectedIndex, items.get(selectedIndex));
                 }
             }
@@ -459,7 +469,18 @@ public abstract class WheelView<DataType> extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (items == null || items.size() == 0) {
+        //绘制中间两条横线
+        if (dividerConfig.visible) {
+            float ratio = dividerConfig.ratio;
+            canvas.drawLine(measuredWidth * (1 - ratio) / 2, firstLineY, measuredWidth * (1 + ratio) / 2, firstLineY, paintIndicator);
+            canvas.drawLine(measuredWidth * (1 - ratio) / 2, secondLineY, measuredWidth * (1 + ratio) / 2, secondLineY, paintIndicator);
+        }
+        if (dividerConfig.shadowVisible) {
+            paintShadow.setColor(dividerConfig.shadowColor);
+            paintShadow.setAlpha(dividerConfig.shadowAlpha);
+            canvas.drawRect(0.0F, firstLineY, measuredWidth, secondLineY, paintShadow);
+        }
+        if (items == null || items.size() == 0 /*|| stop*/) {
             return;
         }
         //可见项的数组
@@ -502,17 +523,6 @@ public abstract class WheelView<DataType> extends View {
                 visibleItemStrings[counter] = getContent(index);
             }
             counter++;
-        }
-        //绘制中间两条横线
-        if (dividerConfig.visible) {
-            float ratio = dividerConfig.ratio;
-            canvas.drawLine(measuredWidth * (1 - ratio) / 2, firstLineY, measuredWidth * (1 + ratio) / 2, firstLineY, paintIndicator);
-            canvas.drawLine(measuredWidth * (1 - ratio) / 2, secondLineY, measuredWidth * (1 + ratio) / 2, secondLineY, paintIndicator);
-        }
-        if (dividerConfig.shadowVisible) {
-            paintShadow.setColor(dividerConfig.shadowColor);
-            paintShadow.setAlpha(dividerConfig.shadowAlpha);
-            canvas.drawRect(0.0F, firstLineY, measuredWidth, secondLineY, paintShadow);
         }
         counter = 0;
         while (counter < visibleItemCount) {
@@ -703,6 +713,7 @@ public abstract class WheelView<DataType> extends View {
         switch (event.getAction()) {
             //按下
             case MotionEvent.ACTION_DOWN:
+                stop = false;
                 startTime = System.currentTimeMillis();
                 cancelFuture();
                 previousY = event.getRawY();
@@ -776,7 +787,7 @@ public abstract class WheelView<DataType> extends View {
     /**
      * 获取选项个数
      */
-    protected int getItemCount() {
+    public int getItemCount() {
         return items != null ? items.size() : 0;
     }
 
@@ -892,35 +903,6 @@ public abstract class WheelView<DataType> extends View {
 
     }
 
-    /**
-     * @deprecated 使用{@link #DividerConfig}代替
-     */
-    @Deprecated
-    public static class LineConfig extends DividerConfig {
-    }
-
-    /**
-     * 用于兼容旧版本的纯字符串条目
-     */
-    protected static class StringItem implements WheelItem {
-        protected String name;
-
-        protected StringItem(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public List<? extends WheelItem> getChildren() {
-            return null;
-        }
-
-    }
-
     protected static class MessageHandler extends Handler {
         static final int WHAT_INVALIDATE = 1000;
         static final int WHAT_SMOOTH_SCROLL = 2000;
@@ -939,6 +921,7 @@ public abstract class WheelView<DataType> extends View {
                     view.invalidate();
                     break;
                 case WHAT_SMOOTH_SCROLL:
+
                     view.isRolling = true;
                     view.smoothScroll(WheelView.ACTION_FLING);
                     break;
@@ -1003,10 +986,12 @@ public abstract class WheelView<DataType> extends View {
         float a = Integer.MAX_VALUE;
         final float velocityY;
         final WheelView view;
+        boolean stop;
 
         InertiaTimerTask(WheelView view, float velocityY) {
             this.view = view;
             this.velocityY = velocityY;
+            stop = false;
         }
 
         @Override
@@ -1022,11 +1007,12 @@ public abstract class WheelView<DataType> extends View {
                     a = velocityY;
                 }
             }
-            if (Math.abs(a) >= 0.0F && Math.abs(a) <= 20F) {
+            if (Math.abs(a) >= 0.0F && Math.abs(a) <= 20F && !stop) {
                 view.cancelFuture();
                 view.handler.sendEmptyMessage(MessageHandler.WHAT_SMOOTH_SCROLL);
                 return;
             }
+            stop = false;
             int i = (int) ((a * 10F) / 1000F);
             view.totalScrollY = view.totalScrollY - i;
             if (!view.isLoop) {
@@ -1099,17 +1085,18 @@ public abstract class WheelView<DataType> extends View {
 
     public abstract DataType getItem(int position);
 
-    //    public final void setItems(List<?> items) {
-//        //.......
-//        remeasure();
-//        invalidate();
-//    }
-
-    //    public final void setItems(List<?> items, int index) {
-//        //........
-//        setSelectedIndex(index);
-//    }
     public boolean isRolling() {
         return isRolling;
+    }
+
+    public void stop() {
+        stop = true;
+        if (command != null) {
+            command.stop = true;
+        }
+//        handler.removeMessages(MessageHandler.WHAT_INVALIDATE);
+//        handler.removeMessages(MessageHandler.WHAT_ITEM_SELECTED);
+//        handler.removeMessages(MessageHandler.WHAT_SMOOTH_SCROLL);
+//        mFuture.cancel(true);
     }
 }
