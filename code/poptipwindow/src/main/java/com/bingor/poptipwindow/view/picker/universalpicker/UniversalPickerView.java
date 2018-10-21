@@ -85,7 +85,7 @@ public class UniversalPickerView extends Picker {
         wheelView.setOnItemSelectListener(new OnItemSelectListener<WheelItem>() {
             @Override
             public <View extends WheelView> void onSelected(View wheelView, int index, WheelItem item) {
-                Log.d("HXB", "wheelView==" + wheelView.getTag() + "  isRolling==" + wheelView.isRolling());
+                //Log.d("HXB", "wheelView==" + wheelView.getTag() + "  isRolling==" + wheelView.isRolling());
                 //滚轮组别
                 int group = (int) wheelView.getTag();
 
@@ -116,7 +116,7 @@ public class UniversalPickerView extends Picker {
 
 
                 positions[group] = index;
-                Log.d("HXB", "最终移动的组==" + group);
+                //Log.d("HXB", "最终移动的组==" + group);
 
 
                 //某组当前项

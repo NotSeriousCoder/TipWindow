@@ -36,10 +36,10 @@ public abstract class Picker extends LinearLayout {
         super(context);
         lineSpaceMultiplier = 2;
         textSize = (int) (getContext().getResources().getDisplayMetrics().density * 14);
-        textColorNormal = Color.parseColor("#999999");
-        textColorFocus = Color.parseColor("#000000");
+        textColorNormal = getResources().getColor(R.color.text_no_focus);
+        textColorFocus = getResources().getColor(R.color.text_focus);
         dividerWidthRatio = 1.0f;
-        dividerColor = Color.parseColor("#000000");
+        dividerColor = getResources().getColor(R.color.divider);
         visibleItemCount = 3;
         //能否循环
         cycleable = true;
@@ -55,10 +55,10 @@ public abstract class Picker extends LinearLayout {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.Picker);
         lineSpaceMultiplier = ta.getInteger(R.styleable.Picker_lineSpaceMultiplier, 2);
         textSize = ta.getDimensionPixelSize(R.styleable.Picker_textSize, (int) (getContext().getResources().getDisplayMetrics().density * 14));
-        textColorNormal = ta.getColor(R.styleable.Picker_textColorNormal, Color.parseColor("#999999"));
-        textColorFocus = ta.getColor(R.styleable.Picker_textColorFocus, Color.parseColor("#000000"));
+        textColorNormal = ta.getColor(R.styleable.Picker_textColorNormal, getResources().getColor(R.color.text_no_focus));
+        textColorFocus = ta.getColor(R.styleable.Picker_textColorFocus, getResources().getColor(R.color.text_focus));
         dividerWidthRatio = ta.getFloat(R.styleable.Picker_dividerWidthRatio, 1.0f);
-        dividerColor = ta.getColor(R.styleable.Picker_dividerColor, Color.parseColor("#000000"));
+        dividerColor = ta.getColor(R.styleable.Picker_dividerColor, getResources().getColor(R.color.divider));
         visibleItemCount = ta.getInteger(R.styleable.Picker_visibleItemCount, 3);
         //能否循环
         cycleable = ta.getBoolean(R.styleable.Picker_cycleable, true);
@@ -70,9 +70,8 @@ public abstract class Picker extends LinearLayout {
         setOrientation(LinearLayout.HORIZONTAL);
         setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
-    
-    
-    
+
+
     ///////////////////////////////////////////////////////////////////////////////////////////
     public int getLineSpaceMultiplier() {
         return lineSpaceMultiplier;

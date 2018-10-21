@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="main_color">#4B99E6</color>
+    <color name="gray_3">#333333</color>
+    <color name="text_focus">#333333</color>
+    <color name="text_no_focus">#999999</color>
+    <color name="divider">#666666</color>
+
+</resources>

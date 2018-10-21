@@ -13,9 +13,11 @@ import android.widget.Toast;
 import com.bingor.numbertipview.NumTipView;
 import com.bingor.poptipwindow.adapter.SimpleListAdapter;
 import com.bingor.poptipwindow.builder.CustomTipWindowBuilder;
+import com.bingor.poptipwindow.builder.DateTimePickerWindowBuilder;
 import com.bingor.poptipwindow.builder.ListTipWindowBuilder;
 import com.bingor.poptipwindow.builder.UniversalPickerWindowBuilder;
 import com.bingor.poptipwindow.impl.OnDataSelectedListener;
+import com.bingor.poptipwindow.impl.OnDataTimeDialogListener;
 import com.bingor.poptipwindow.impl.OnItemClickListener;
 import com.bingor.poptipwindow.impl.OnWindowStateChangedListener;
 import com.bingor.poptipwindow.view.picker.datetimepicker.DateTimePickerView;
@@ -35,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         findViewById(R.id.tv).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +110,42 @@ public class MainActivity extends AppCompatActivity {
                             }
                         })
                         .create()
-                        .show(findViewById(R.id.tv));
+                        .show(findViewById(R.id.ll_main));
+//                        .show(getWindow().getDecorView());
+            }
+        });
+        findViewById(R.id.bt_date_time_picker).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DateTimePickerWindowBuilder(MainActivity.this)
+                        .setOK("选定")
+                        .setOnDataTimeDialogListener(new OnDataTimeDialogListener() {
+                            @Override
+                            public void onOKClicked(@NotNull String dateTimeFormat, long dateTime) {
+                                Toast.makeText(getBaseContext(), dateTimeFormat, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCancelClicked() {
+
+                            }
+
+                            @Override
+                            public void onOutsideClicked() {
+
+                            }
+                        })
+                        .setDateTimeStart(1995, 3, 20, 0, 0)
+                        .setDateTimeEnd(2222, 8, 8, 23, 59)
+                        .setOK("好的")
+                        .setCancel("取消")
+                        .setDividerColor(Color.parseColor("#1069C2"))
+                        .setTextColorFocus(Color.parseColor("#F10606"))
+                        .setTextColorNormal(getResources().getColor(R.color.colorAccent))
+                        .setVisibleItemCount(7)
+                        .setDividerWidthRatio(0.7f)
+                        .create()
+                        .show(findViewById(R.id.bt_data_picker));
             }
         });
 
@@ -221,10 +257,12 @@ public class MainActivity extends AppCompatActivity {
 //        wheelView4.setItems(0, 999, 0);
 //        wheelView5.setItems(0, 999, 0);
 
-        DateTimePickerView dateTimePickerView = findViewById(R.id.upv_test);
-        dateTimePickerView
-                .setDateTimeStart(1995, 3, 8, 10, 30)
-                .setDateTimeEnd(2000, 1, 15, 11, 10)
-                .initDateTime();
+//        DateTimePickerView dateTimePickerView = findViewById(R.id.upv_test);
+//        dateTimePickerView
+//                .setDateTimeStart(1995, 3, 8, 10, 30)
+//                .setDateTimeEnd(2000, 1, 15, 11, 10)
+//                .setTextColorNormal(Color.parseColor("#a12185"))
+//                .init();
     }
+
 }

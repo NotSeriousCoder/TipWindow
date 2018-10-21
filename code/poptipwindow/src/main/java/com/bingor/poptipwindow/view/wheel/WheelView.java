@@ -171,9 +171,11 @@ public abstract class WheelView<DataType> extends View {
             initPosition = index;
             totalScrollY = 0;//回归顶部，不然重设索引的话位置会偏移，就会显示出不对位置的数据
             offset = 0;
-            Log.d("HXB", "去重绘");
+            //Log.d("HXB", "去重绘");
             invalidate();
         }
+        //HXB 2018-10-21 让回调能返回正确的index
+        selectedIndex = index;
         itemSelectedCallback();
     }
 
@@ -452,7 +454,7 @@ public abstract class WheelView<DataType> extends View {
     }
 
     protected void itemSelectedCallback() {
-        Log.d("HXB", "stop=="+stop);
+        //Log.d("HXB", "stop=="+stop);
 
         if (onItemSelectListener == null || stop) {
             return;
@@ -704,6 +706,7 @@ public abstract class WheelView<DataType> extends View {
         this.widthMeasureSpec = widthMeasureSpec;
         remeasure();
         setMeasuredDimension(measuredWidth, measuredHeight);
+        Log.d("HXB", "measuredHeight==" + measuredHeight);
     }
 
     @Override

@@ -1,8 +1,11 @@
 package com.bingor.poptipwindow.view.picker.datetimepicker;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.design.internal.ThemeEnforcement;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -25,6 +28,7 @@ import com.bingor.poptipwindow.view.wheel.WheelView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,9 +45,15 @@ public class DateTimePickerView extends Picker {
     private NumberWheelView npYear, npMonth, npDay, npHour, npMinute;
     private List<View> pagesList;
     private DateTimePageAdapter adapter;
+    //下划线颜色
+    private int tabIndicatorColor;
 
     public DateTimePickerView(Context context) {
-        this(context, null);
+        super(context, null);
+        tabIndicatorColor = getResources().getColor(R.color.main_color);
+        initView();
+        initData();
+        initListener();
     }
 
     public DateTimePickerView(Context context, @Nullable AttributeSet attrs) {
@@ -52,60 +62,40 @@ public class DateTimePickerView extends Picker {
 
     public DateTimePickerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
-        for (int i = 0, size = attrs.getAttributeCount(); i < size; i++) {
-            String name = attrs.getAttributeName(i);
-            String value = attrs.getAttributeValue(i);
-            if ("tabIndicatorColor".equals(name) || "tabSelectedTextColor".equals(name) || "tabTextColor".equals(name)) {
-                tab.setSelectedTabIndicatorColor();
-                if (value.startsWith("@")) {
-                    int bgResId = Integer.parseInt(value.substring(1));
-                    setBackgroundResource(bgResId);
-//                    rootView.findViewById(R.id.ll_main).setBackgroundResource(bgResId);
-                } else if (value.startsWith("#")) {
-                    String alphaStr = null;
-                    String colorStr = null;
-                    if (value.length() == 9) {
-                        alphaStr = value.substring(1, 3);
-                        colorStr = value.substring(3);
-                    } else if (value.length() <= 7) {
-                        colorStr = value.substring(1);
-                    }
-                    if (colorStr != null) {
-                        try {
-                            int color = Integer.parseInt(colorStr, 16);
-                            setBackgroundColor(color);
-//                            rootView.findViewById(R.id.ll_main).setBackgroundColor(color);
-                        } catch (NumberFormatException e) {
-
-                        }
-                    }
-
-                    if (alphaStr != null && Build.VERSION.SDK_INT >= 11) {
-                        try {
-                            int alpha = Integer.parseInt(alphaStr, 16);
-                            setAlpha(alpha);
-//                            rootView.findViewById(R.id.ll_main).setAlpha(alpha);
-                        } catch (NumberFormatException e) {
-
-                        }
-                    }
-
-                }
-            }
-        }
-
-//        app:tabIndicatorColor="#ffff11"
-//        app:tabSelectedTextColor="#3a9155"
-//        app:tabTextColor="#000000"
-
+        TypedArray ta = context.obtainStyledAttributes(attrs, android.support.design.R.styleable.TabLayout);
+        tabIndicatorColor = ta.getColor(android.support.design.R.styleable.TabLayout_tabIndicatorColor, getResources().getColor(R.color.main_color));
+        ta.recycle();
 
         initView();
         initData();
         initListener();
     }
 
+    public void init() {
+        tab.setSelectedTabIndicatorColor(tabIndicatorColor);
+        tab.setTabTextColors(textColorNormal, textColorFocus);
+        initWheelView(npYear);
+        initWheelView(npMonth);
+        initWheelView(npDay);
+        initWheelView(npHour);
+        initWheelView(npMinute);
+
+        dateTimeSelect.setTimeMillis(dateTimeInit.timeMillis);
+        npYear.setItems(dateTimeStart.year, dateTimeEnd.year, dateTimeInit.year);
+        npMonth.setItems(1, 12, dateTimeInit.month);
+        npDay.setItems(1, 30, dateTimeInit.day);
+        npHour.setItems(0, 23, dateTimeInit.hour);
+        npMinute.setItems(0, 59, dateTimeInit.minute);
+    }
+
     private void initView() {
+//        ViewGroup.LayoutParams lp = getLayoutParams();
+//        if (lp == null) {
+//            lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        } else {
+//            lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//        }
+//        setLayoutParams(lp);
         rootView = LayoutInflater.from(getContext()).inflate(R.layout.view_date_time_picker, this);
         tab = rootView.findViewById(R.id.tl_m_view_date_time_picker_p_tab);
         pages = rootView.findViewById(R.id.vp_m_view_date_time_picker_p_pages);
@@ -119,12 +109,6 @@ public class DateTimePickerView extends Picker {
         pageTime = LayoutInflater.from(getContext()).inflate(R.layout.view_date_time_picker_page_time, null);
         npHour = pageTime.findViewById(R.id.np_m_view_date_time_picker_page_time_p_hour);
         npMinute = pageTime.findViewById(R.id.np_m_view_date_time_picker_page_time_p_minute);
-
-        initWheelView(npYear);
-        initWheelView(npMonth);
-        initWheelView(npDay);
-        initWheelView(npHour);
-        initWheelView(npMinute);
     }
 
     protected void initWheelView(NumberWheelView numberWheelView) {
@@ -149,6 +133,13 @@ public class DateTimePickerView extends Picker {
         numberWheelView.setCycleable(cycleable);
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        Log.d("HXB", "npYear.getMeasuredHeight()==" + npYear.getMeasuredHeight());
+//        Log.d("HXB", "pages.getMeasuredHeight()==" + pages.getMeasuredHeight());
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec((npYear.getMeasuredHeight() + tab.getMeasuredHeight()), MeasureSpec.getMode(heightMeasureSpec)));
+    }
+
     private void initData() {
         dateTimeStart = new DateTimeInfo(1, 1, 1, 0, 0);
         dateTimeEnd = new DateTimeInfo(9999, 12, 31, 23, 59);
@@ -161,12 +152,12 @@ public class DateTimePickerView extends Picker {
         adapter = new DateTimePageAdapter();
         pages.setAdapter(adapter);
 
-
         npYear.setItems(dateTimeStart.year, dateTimeEnd.year, dateTimeInit.year);
         npMonth.setItems(dateTimeStart.month, dateTimeEnd.month, dateTimeInit.month);
         npDay.setItems(dateTimeStart.day, dateTimeEnd.day, dateTimeInit.day);
         npHour.setItems(dateTimeStart.hour, dateTimeEnd.hour, dateTimeInit.hour);
         npMinute.setItems(dateTimeStart.minute, dateTimeEnd.minute, dateTimeInit.minute);
+
     }
 
     private void initListener() {
@@ -328,26 +319,43 @@ public class DateTimePickerView extends Picker {
 
     public DateTimePickerView setDateTimeStart(int year, int month, int day, int hour, int minute) {
         dateTimeStart.setDateTime(year, month, day, hour, minute);
+        if (dateTimeStart.timeMillis > dateTimeEnd.timeMillis) {
+            dateTimeStart.setTimeMillis(dateTimeEnd.timeMillis);
+        }
         return this;
     }
 
-    public DateTimePickerView setDateTimeStart(int dateTimeStartMillis) {
+    public DateTimePickerView setDateTimeStart(long dateTimeStartMillis) {
         dateTimeStart.setTimeMillis(dateTimeStartMillis);
+        if (dateTimeStart.timeMillis > dateTimeEnd.timeMillis) {
+            dateTimeStart.setTimeMillis(dateTimeEnd.timeMillis);
+        }
         return this;
     }
 
     public DateTimePickerView setDateTimeEnd(int year, int month, int day, int hour, int minute) {
         dateTimeEnd.setDateTime(year, month, day, hour, minute);
+        if (dateTimeEnd.timeMillis < dateTimeStart.timeMillis) {
+            dateTimeEnd.setTimeMillis(dateTimeStart.timeMillis);
+        }
         return this;
     }
 
     public DateTimePickerView setDateTimeEnd(long dateTimeEndMillis) {
         dateTimeEnd.setTimeMillis(dateTimeEndMillis);
+        if (dateTimeEnd.timeMillis < dateTimeStart.timeMillis) {
+            dateTimeEnd.setTimeMillis(dateTimeStart.timeMillis);
+        }
         return this;
     }
 
     public DateTimePickerView setDateTimeInit(int year, int month, int day, int hour, int minute) {
         dateTimeInit.setDateTime(year, month, day, hour, minute);
+        if (dateTimeInit.timeMillis < dateTimeStart.timeMillis) {
+            dateTimeInit.setTimeMillis(dateTimeStart.timeMillis);
+        } else if (dateTimeInit.timeMillis > dateTimeEnd.timeMillis) {
+            dateTimeInit.setTimeMillis(dateTimeEnd.timeMillis);
+        }
         return this;
     }
 
@@ -356,13 +364,34 @@ public class DateTimePickerView extends Picker {
         return this;
     }
 
-    public void initDateTime() {
-        dateTimeSelect.setTimeMillis(dateTimeInit.timeMillis);
-        npYear.setItems(dateTimeStart.year, dateTimeEnd.year, dateTimeInit.year);
-        npMonth.setItems(1, 12, dateTimeInit.month);
-        npDay.setItems(1, 30, dateTimeInit.day);
-        npHour.setItems(0, 23, dateTimeInit.hour);
-        npMinute.setItems(0, 59, dateTimeInit.minute);
+    public DateTimePickerView setTabIndicatorColor(int tabIndicatorColor) {
+        this.tabIndicatorColor = tabIndicatorColor;
+        return this;
     }
 
+    @Override
+    public DateTimePickerView setTextSize(int textSizePX) {
+        super.setTextSize(textSizePX);
+        return this;
+    }
+
+    @Override
+    public DateTimePickerView setTextColorNormal(int textColorNormal) {
+        super.setTextColorNormal(textColorNormal);
+        return this;
+    }
+
+    @Override
+    public DateTimePickerView setTextColorFocus(int textColorFocus) {
+        super.setTextColorFocus(textColorFocus);
+        return this;
+    }
+
+    public long getDateTimeSelect() {
+        return dateTimeSelect.timeMillis;
+    }
+
+    public String getDateTimeSelect(String format) {
+        return new SimpleDateFormat(format).format(new Date(dateTimeSelect.timeMillis));
+    }
 }

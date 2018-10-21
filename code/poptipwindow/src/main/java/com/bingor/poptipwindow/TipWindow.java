@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bingor.poptipwindow.adapter.GeneralAdapter;
 import com.bingor.poptipwindow.impl.OnAdapterStateChangeListener;
@@ -47,7 +47,7 @@ public class TipWindow {
     private TextView tvOK, tvCancel;
     private String textOK, textCancel, textContent;
     private OnWindowStateChangedListener onWindowStateChangedListener;
-
+    private boolean contentNeedPaddingTop = true;
 
     public void init() throws Exception {
         if ((contentView != null || !TextUtils.isEmpty(textContent)) && adapter != null) {
@@ -62,6 +62,10 @@ public class TipWindow {
             tvOK = rootView.findViewById(R.id.tv_m_view_tip_ok_cancel_p_ok);
             tvCancel = rootView.findViewById(R.id.tv_m_view_tip_ok_cancel_p_cancel);
             okCancelPadding = rootView.findViewById(R.id.view_m_view_tip_ok_cancel_p_ok_cancel_padding);
+
+            if (!contentNeedPaddingTop) {
+                parent.setPadding(parent.getPaddingLeft(), 0, parent.getPaddingRight(), parent.getPaddingBottom());
+            }
             initContent();
         } else if (adapter != null) {
             if (maxHeight == 0) {
@@ -186,7 +190,9 @@ public class TipWindow {
     }
 
     public void show(View anchor) {
-        window.showAsDropDown(anchor.getRootView(), 0, 0);
+//        window.showAsDropDown(ViewUtil.findRootView(anchor), 0, 0);
+//        window.showAsDropDown(anchor, 0, 0);
+        window.showAtLocation(anchor.getRootView(), Gravity.START | Gravity.BOTTOM, 0, 0);
         parent.startAnimation(AnimationUtils.loadAnimation(context, R.anim.translate_in));
     }
 
@@ -301,6 +307,9 @@ public class TipWindow {
         this.cancelable = cancelable;
     }
 
+    public void setContentNeedPaddingTop(boolean contentNeedPaddingTop) {
+        this.contentNeedPaddingTop = contentNeedPaddingTop;
+    }
     //////////////////////////////getset////////////////////////////////
 
 }
