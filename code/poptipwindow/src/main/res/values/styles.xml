@@ -10,4 +10,9 @@
         <item name="android:windowEnterAnimation">@anim/anim_null_in</item>
         <item name="android:windowExitAnimation">@anim/anim_null_out</item>
     </style>
+
+    <style name="dialogWindowAnim" parent="android:Animation" mce_bogus="1">
+        <item name="android:windowEnterAnimation">@anim/anim_null_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_null_out</item>
+    </style>
 </resources>

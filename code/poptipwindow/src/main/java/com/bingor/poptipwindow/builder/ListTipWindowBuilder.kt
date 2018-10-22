@@ -1,27 +1,26 @@
 package com.bingor.poptipwindow.builder
 
 import android.content.Context
-import com.bingor.poptipwindow.TipWindow
 import com.bingor.poptipwindow.adapter.GeneralAdapter
 import com.bingor.poptipwindow.impl.OnItemClickListener
 
 /**
  * Created by HXB on 2018/10/8.
  */
-class ListTipWindowBuilder(context: Context) : TipWindowBuilder<ListTipWindowBuilder>(context) {
+class ListTipWindowBuilder(context: Context, tipType: Int) : TipWindowBuilder<ListTipWindowBuilder>(context, tipType) {
 
     fun setAdapter(adapter: GeneralAdapter<*>): ListTipWindowBuilder {
-        tipWindow.adapter = adapter
+        tip.adapter = adapter
         return this
     }
 
     fun <T> setOnItemClickListener(onItemClickListener: OnItemClickListener<T>): ListTipWindowBuilder {
-        tipWindow.onItemClickListener = onItemClickListener
+        tip.onItemClickListener = onItemClickListener
         return this
     }
 
     fun setMaxHeight(maxHeight: Int): ListTipWindowBuilder {
-        tipWindow.maxHeight = maxHeight
+        tip.maxHeight = maxHeight
         return this
     }
 

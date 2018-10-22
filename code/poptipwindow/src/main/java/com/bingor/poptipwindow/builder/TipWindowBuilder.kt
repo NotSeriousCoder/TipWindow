@@ -2,17 +2,30 @@ package com.bingor.poptipwindow.builder
 
 import android.app.Activity
 import android.content.Context
-import com.bingor.poptipwindow.TipWindow
+import com.bingor.poptipwindow.view.tip.Tip
+import com.bingor.poptipwindow.view.tip.TipDialog
+import com.bingor.poptipwindow.view.tip.TipWindow
 
 /**
  * Created by HXB on 2018/10/8.
  */
 abstract class TipWindowBuilder<T> {
-    var tipWindow: TipWindow
+    companion object {
+        @JvmField
+        val TIP_TYPE_WINDOW = 0
+        @JvmField
+        val TIP_TYPE_DIALOG = 1
+    }
 
-    constructor(context: Context) {
-        tipWindow = TipWindow(context as Activity?)
-        tipWindow.context = context
+    var tip: Tip
+
+    constructor(context: Context, tipType: Int) {
+        if (tipType == TIP_TYPE_WINDOW) {
+            tip = TipWindow()
+        } else {
+            tip = TipDialog()
+        }
+        tip.context = context
     }
 
     /**
@@ -23,24 +36,24 @@ abstract class TipWindowBuilder<T> {
      */
     open fun setAlpha(alpha: Float): T {
         if (alpha >= 1.0f) {
-            tipWindow.alpha = 255
+            tip.alpha = 255
         } else if (alpha <= 0f) {
-            tipWindow.alpha = 0
+            tip.alpha = 0
         } else {
-            tipWindow.alpha = (255 * alpha).toInt()
+            tip.alpha = (255 * alpha).toInt()
         }
         return this as T
     }
 
 
     fun setCancelable(cancelable: Boolean): T {
-        tipWindow.setCancelable(cancelable)
+        tip.setCancelable(cancelable)
         return this as T
     }
 
-    open fun create(): TipWindow {
-        tipWindow.init()
-        return tipWindow
+    open fun create(): Tip {
+        tip.init()
+        return tip
     }
 
 }
