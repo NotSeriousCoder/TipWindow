@@ -14,8 +14,7 @@
 	lastversion目前是1.0.7
 
 ## 使用方法
-### 1.常规使用
-##### a.列表模式
+### 1.列表模式
 	private SimpleListAdapter adapter;
 	
 	if (adapter == null) {
@@ -42,8 +41,10 @@
                         .setAlpha(0.3f)
                         .create()
                         .show(findViewById(R.id.tv));
+##### 注：自定义adapter
+	列表模式下可以继承GeneralAdapter<Data>，自己实现列表样式
 
-##### b.自定义模式
+### 2.自定义模式
 	TextView tv = new TextView(MainActivity.this);
                 ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 tv.setLayoutParams(lp);
@@ -75,8 +76,7 @@
                         })
                         .create()
                         .show(findViewById(R.id.tv));
-### 2.自定义adapter
-	列表模式下可以继承GeneralAdapter<Data>，自己实现列表样式
+
 
 ## BUG反馈
 	请在Github直接提，或者邮箱找我710267819@qq.com
