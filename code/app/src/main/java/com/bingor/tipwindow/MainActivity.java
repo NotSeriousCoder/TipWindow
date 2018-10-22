@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                         //终止时间，不设置默认9999-12-31 23:59
                         .setDateTimeEnd(2222, 8, 8, 23, 59)
                         //默认显示时间，不设置默认当前时间
-                        .setDateTimeInit(2018,10,22,10,29)
+                        .setDateTimeInit(2018, 10, 22, 10, 29)
                         .setOK("好的")
                         .setCancel("取消")
                         //设置是否能点击空白处取消（对返回键无效，待改进）
@@ -157,6 +157,12 @@ public class MainActivity extends AppCompatActivity {
                         .setVisibleItemCount(7)
                         //设置滚轮分割线宽度比例
                         .setDividerWidthRatio(0.7f)
+                        //设置显示模式（日期-时间/仅日期/仅时间）
+                        /**
+                         * {@link DateTimePickerView#TYPE_NORMAL}
+                         * {@link DateTimePickerView#TYPE_JUST_DATE}
+                         * {@link DateTimePickerView#TYPE_JUST_TIME}
+                         */
                         .setType(DateTimePickerView.TYPE_JUST_TIME)
                         .create()
                         .show(findViewById(R.id.bt_data_picker));
