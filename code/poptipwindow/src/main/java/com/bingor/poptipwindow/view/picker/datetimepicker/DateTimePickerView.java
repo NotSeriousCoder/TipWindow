@@ -37,6 +37,9 @@ import java.util.Map;
  * Created by HXB on 2018/10/16.
  */
 public class DateTimePickerView extends Picker {
+    public static final int TYPE_NORMAL = 0;
+    public static final int TYPE_JUST_DATE = 1;
+    public static final int TYPE_JUST_TIME = 2;
     private DateTimeInfo dateTimeStart, dateTimeEnd, dateTimeInit, dateTimeSelect;
 
     private View rootView, pageDate, pageTime;
@@ -47,6 +50,8 @@ public class DateTimePickerView extends Picker {
     private DateTimePageAdapter adapter;
     //下划线颜色
     private int tabIndicatorColor;
+    private int type = TYPE_NORMAL;
+
 
     public DateTimePickerView(Context context) {
         super(context, null);
@@ -137,7 +142,8 @@ public class DateTimePickerView extends Picker {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 //        Log.d("HXB", "npYear.getMeasuredHeight()==" + npYear.getMeasuredHeight());
 //        Log.d("HXB", "pages.getMeasuredHeight()==" + pages.getMeasuredHeight());
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec((npYear.getMeasuredHeight() + tab.getMeasuredHeight()), MeasureSpec.getMode(heightMeasureSpec)));
+        int height = Math.max(npYear.getMeasuredHeight(), npHour.getMeasuredHeight());
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec((height + tab.getMeasuredHeight()), MeasureSpec.getMode(heightMeasureSpec)));
     }
 
     private void initData() {
@@ -281,7 +287,14 @@ public class DateTimePickerView extends Picker {
     private class DateTimePageAdapter extends PagerAdapter {
         @Override
         public int getCount() {
-            return pagesList.size();
+            switch (type) {
+                case TYPE_NORMAL:
+                    return pagesList.size();
+                case TYPE_JUST_DATE:
+                case TYPE_JUST_TIME:
+                    return 1;
+            }
+            return 0;
         }
 
         @Override
@@ -291,7 +304,19 @@ public class DateTimePickerView extends Picker {
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(pagesList.get(position));
+            View view = null;
+            switch (type) {
+                case TYPE_NORMAL:
+                    view = pagesList.get(position);
+                    break;
+                case TYPE_JUST_DATE:
+                    view = pagesList.get(0);
+                    break;
+                case TYPE_JUST_TIME:
+                    view = pagesList.get(1);
+                    break;
+            }
+            container.removeView(view);
         }
 
         @Override
@@ -301,19 +326,42 @@ public class DateTimePickerView extends Picker {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            String title;
-            if (position == 0) {
-                title = dateTimeSelect.year + "-" + dateTimeSelect.month + "-" + dateTimeSelect.day;
-            } else {
-                title = dateTimeSelect.hour + ":" + dateTimeSelect.minute;
+            String title = "";
+            switch (type) {
+                case TYPE_NORMAL:
+                    if (position == 0) {
+                        title = dateTimeSelect.year + "-" + dateTimeSelect.month + "-" + dateTimeSelect.day;
+                    } else {
+                        title = dateTimeSelect.hour + ":" + dateTimeSelect.minute;
+                    }
+                    break;
+                case TYPE_JUST_DATE:
+                    title = dateTimeSelect.year + "-" + dateTimeSelect.month + "-" + dateTimeSelect.day;
+                    break;
+                case TYPE_JUST_TIME:
+                    title = dateTimeSelect.hour + ":" + dateTimeSelect.minute;
+                    break;
             }
+
             return title;
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            container.addView(pagesList.get(position));
-            return pagesList.get(position);
+            View view = null;
+            switch (type) {
+                case TYPE_NORMAL:
+                    view = pagesList.get(position);
+                    break;
+                case TYPE_JUST_DATE:
+                    view = pagesList.get(0);
+                    break;
+                case TYPE_JUST_TIME:
+                    view = pagesList.get(1);
+                    break;
+            }
+            container.addView(view);
+            return view;
         }
     }
 
@@ -393,5 +441,19 @@ public class DateTimePickerView extends Picker {
 
     public String getDateTimeSelect(String format) {
         return new SimpleDateFormat(format).format(new Date(dateTimeSelect.timeMillis));
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    /**
+     * @param type {@link DateTimePickerView#TYPE_NORMAL}
+     *             {@link DateTimePickerView#TYPE_JUST_DATE}
+     *             {@link DateTimePickerView#TYPE_JUST_TIME}
+     */
+    public void setType(int type) {
+        this.type = type;
+        adapter.notifyDataSetChanged();
     }
 }

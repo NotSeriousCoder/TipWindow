@@ -1,5 +1,6 @@
 package com.bingor.poptipwindow.builder
 
+import android.app.Activity
 import android.content.Context
 import com.bingor.poptipwindow.TipWindow
 
@@ -10,7 +11,7 @@ abstract class TipWindowBuilder<T> {
     var tipWindow: TipWindow
 
     constructor(context: Context) {
-        tipWindow = TipWindow()
+        tipWindow = TipWindow(context as Activity?)
         tipWindow.context = context
     }
 

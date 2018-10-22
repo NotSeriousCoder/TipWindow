@@ -1,5 +1,6 @@
 package com.bingor.tipwindow;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -135,17 +137,30 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                         })
+                        //起始时间，不设置默认1-1-1 0:0
                         .setDateTimeStart(1995, 3, 20, 0, 0)
+                        //终止时间，不设置默认9999-12-31 23:59
                         .setDateTimeEnd(2222, 8, 8, 23, 59)
+                        //默认显示时间，不设置默认当前时间
+                        .setDateTimeInit(2018,10,22,10,29)
                         .setOK("好的")
                         .setCancel("取消")
+                        //设置是否能点击空白处取消（对返回键无效，待改进）
+                        .setCancelable(false)
+                        //设置滚轮分割线颜色（同时也是顶部Tab的选中颜色）
                         .setDividerColor(Color.parseColor("#1069C2"))
+                        //滚轮聚焦文字的颜色（同时也是顶部Tab的选中文字颜色）
                         .setTextColorFocus(Color.parseColor("#F10606"))
+                        //滚轮正常文字的颜色（同时也是顶部Tab的非选中文字颜色）
                         .setTextColorNormal(getResources().getColor(R.color.colorAccent))
+                        //设置滚轮可见项数量
                         .setVisibleItemCount(7)
+                        //设置滚轮分割线宽度比例
                         .setDividerWidthRatio(0.7f)
+                        .setType(DateTimePickerView.TYPE_JUST_TIME)
                         .create()
                         .show(findViewById(R.id.bt_data_picker));
+
             }
         });
 

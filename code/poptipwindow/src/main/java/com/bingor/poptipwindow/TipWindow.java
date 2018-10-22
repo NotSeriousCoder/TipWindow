@@ -1,13 +1,24 @@
 package com.bingor.poptipwindow;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.ActionMode;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.SearchEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -15,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bingor.poptipwindow.adapter.GeneralAdapter;
 import com.bingor.poptipwindow.impl.OnAdapterStateChangeListener;
@@ -25,7 +37,7 @@ import com.bingor.poptipwindow.util.UnitConverter;
 /**
  * Created by HXB on 2018/9/19.
  */
-public class TipWindow {
+public class TipWindow implements KeyEvent.Callback {
     //通用
     private Context context;
     private View rootView;
@@ -48,6 +60,139 @@ public class TipWindow {
     private String textOK, textCancel, textContent;
     private OnWindowStateChangedListener onWindowStateChangedListener;
     private boolean contentNeedPaddingTop = true;
+
+    public TipWindow(final Activity activity) {
+//        Window w = activity.getWindow();
+//        w.setCallback(new Window.Callback() {
+//            @Override
+//            public boolean dispatchKeyEvent(KeyEvent event) {
+//                Log.d("HXB", "dispatchKeyEvent");
+////                Toast.makeText(activity, "dispatchKeyEvent==" + event.getAction(), Toast.LENGTH_SHORT).show();
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean dispatchKeyShortcutEvent(KeyEvent event) {
+//                Log.d("HXB", "dispatchKeyShortcutEvent");
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean dispatchTouchEvent(MotionEvent event) {
+//                Log.d("HXB", "dispatchTouchEvent");
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean dispatchTrackballEvent(MotionEvent event) {
+//                Log.d("HXB", "dispatchTrackballEvent");
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean dispatchGenericMotionEvent(MotionEvent event) {
+//                Log.d("HXB", "dispatchGenericMotionEvent");
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
+//                Log.d("HXB", "dispatchPopulateAccessibilityEvent");
+//                return true;
+//            }
+//
+//            @Override
+//            public View onCreatePanelView(int featureId) {
+//                return null;
+//            }
+//
+//            @Override
+//            public boolean onCreatePanelMenu(int featureId, Menu menu) {
+//                Log.d("HXB", "onCreatePanelMenu");
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onPreparePanel(int featureId, View view, Menu menu) {
+//                Log.d("HXB", "onPreparePanel");
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onMenuOpened(int featureId, Menu menu) {
+//                Log.d("HXB", "onMenuOpened");
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onMenuItemSelected(int featureId, MenuItem item) {
+//                Log.d("HXB", "onMenuItemSelected");
+//                return true;
+//            }
+//
+//            @Override
+//            public void onWindowAttributesChanged(WindowManager.LayoutParams attrs) {
+//
+//            }
+//
+//            @Override
+//            public void onContentChanged() {
+//
+//            }
+//
+//            @Override
+//            public void onWindowFocusChanged(boolean hasFocus) {
+//
+//            }
+//
+//            @Override
+//            public void onAttachedToWindow() {
+//
+//            }
+//
+//            @Override
+//            public void onDetachedFromWindow() {
+//
+//            }
+//
+//            @Override
+//            public void onPanelClosed(int featureId, Menu menu) {
+//
+//            }
+//
+//            @Override
+//            public boolean onSearchRequested() {
+//                Log.d("HXB", "onSearchRequested");
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onSearchRequested(SearchEvent searchEvent) {
+//                Log.d("HXB", "onSearchRequested");
+//                return true;
+//            }
+//
+//            @Override
+//            public ActionMode onWindowStartingActionMode(ActionMode.Callback callback) {
+//                return null;
+//            }
+//
+//            @Override
+//            public ActionMode onWindowStartingActionMode(ActionMode.Callback callback, int type) {
+//                return null;
+//            }
+//
+//            @Override
+//            public void onActionModeStarted(ActionMode mode) {
+//
+//            }
+//
+//            @Override
+//            public void onActionModeFinished(ActionMode mode) {
+//
+//            }
+//        });
+    }
 
     public void init() throws Exception {
         if ((contentView != null || !TextUtils.isEmpty(textContent)) && adapter != null) {
@@ -91,6 +236,14 @@ public class TipWindow {
         window.setOutsideTouchable(true);
         // 设置PopupWindow是否能响应点击事件
         window.setTouchable(true);
+        /*window.setFocusable(true);
+        window.setTouchInterceptor(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Toast.makeText(context, "onTouch", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
         window.setAnimationStyle(R.style.animNull);
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -309,6 +462,34 @@ public class TipWindow {
 
     public void setContentNeedPaddingTop(boolean contentNeedPaddingTop) {
         this.contentNeedPaddingTop = contentNeedPaddingTop;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.KEYCODE_BACK) {
+            Toast.makeText(context, "KEYCODE_BACK", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        return false;
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.KEYCODE_BACK) {
+
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyMultiple(int keyCode, int count, KeyEvent event) {
+        return false;
     }
     //////////////////////////////getset////////////////////////////////
 

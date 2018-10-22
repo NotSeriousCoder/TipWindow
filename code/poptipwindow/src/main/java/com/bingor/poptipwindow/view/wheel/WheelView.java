@@ -706,7 +706,7 @@ public abstract class WheelView<DataType> extends View {
         this.widthMeasureSpec = widthMeasureSpec;
         remeasure();
         setMeasuredDimension(measuredWidth, measuredHeight);
-        Log.d("HXB", "measuredHeight==" + measuredHeight);
+        //Log.d("HXB", "measuredHeight==" + measuredHeight);
     }
 
     @Override

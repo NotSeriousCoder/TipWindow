@@ -32,7 +32,17 @@ class DateTimePickerWindowBuilder : TipWindowBuilder<DateTimePickerWindowBuilder
         tipWindow.onWindowStateChangedListener = object : OnWindowStateChangedListener {
             override fun onOKClicked() {
                 var picker = tipWindow.contentView as DateTimePickerView
-                onDataTimeDialogListener.onOKClicked(picker.getDateTimeSelect("yyyy-MM-dd HH:mm"), picker.dateTimeSelect)
+                when (picker.type) {
+                    DateTimePickerView.TYPE_NORMAL -> {
+                        onDataTimeDialogListener.onOKClicked(picker.getDateTimeSelect("yyyy-MM-dd HH:mm"), picker.dateTimeSelect)
+                    }
+                    DateTimePickerView.TYPE_JUST_DATE -> {
+                        onDataTimeDialogListener.onOKClicked(picker.getDateTimeSelect("yyyy-MM-dd"), picker.dateTimeSelect)
+                    }
+                    DateTimePickerView.TYPE_JUST_TIME -> {
+                        onDataTimeDialogListener.onOKClicked(picker.getDateTimeSelect("HH:mm"), picker.dateTimeSelect)
+                    }
+                }
             }
 
             override fun onCancelClicked() {
@@ -118,6 +128,11 @@ class DateTimePickerWindowBuilder : TipWindowBuilder<DateTimePickerWindowBuilder
 
     fun setTabIndicatorColor(tabIndicatorColor: Int): DateTimePickerWindowBuilder {
         (tipWindow.contentView as DateTimePickerView).setTabIndicatorColor(tabIndicatorColor)
+        return this
+    }
+
+    fun setType(type: Int): DateTimePickerWindowBuilder {
+        (tipWindow.contentView as DateTimePickerView).setType(type)
         return this
     }
 
