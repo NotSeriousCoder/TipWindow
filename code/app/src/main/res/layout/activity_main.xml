@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -29,6 +30,12 @@
         android:layout_height="wrap_content"
         android:text="联动滚轮窗口" />
 
+    <Button
+        android:id="@+id/bt_date_time_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="时间窗口" />
+
     <com.bingor.numbertipview.NumTipView
         android:id="@+id/ntv_m_frg_mine_p_msg_num"
         android:layout_width="wrap_content"
@@ -42,19 +49,15 @@
         app:text_size="10sp"
         app:ver_padding="15dp" />
 
-    <com.bingor.poptipwindow.view.picker.datetimepicker.DateTimePickerView
-        android:id="@+id/upv_test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cycleable="true"
-        app:dividerColor="#551900"
-        app:dividerWidthRatio="0.8"
-        app:lineSpaceMultiplier="2"
-        app:tabIndicatorColor="#112233"
-        app:textColorFocus="#1155dd"
-        app:textColorNormal="#a3dd12"
-        app:textSize="16sp"
-        app:visibleItemCount="5" />
+    <!--<com.bingor.poptipwindow.view.picker.datetimepicker.DateTimePickerView-->
+    <!--android:id="@+id/upv_test"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:cycleable="true"-->
+    <!--app:dividerWidthRatio="0.8"-->
+    <!--app:lineSpaceMultiplier="2"-->
+    <!--app:textSize="16sp"-->
+    <!--app:visibleItemCount="5" />-->
 
     <!--<LinearLayout-->
     <!--android:layout_width="match_parent"-->

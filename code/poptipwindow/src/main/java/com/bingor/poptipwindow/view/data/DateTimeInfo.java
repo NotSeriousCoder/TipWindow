@@ -93,9 +93,11 @@ public class DateTimeInfo {
 
     public void setHour(int hour) {
         this.hour = hour;
+        date2Millis();
     }
 
     public void setMinute(int minute) {
         this.minute = minute;
+        date2Millis();
     }
 }
