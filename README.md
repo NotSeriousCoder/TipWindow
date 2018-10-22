@@ -14,8 +14,7 @@
 	lastversion目前是1.0.7
 
 ## 使用方法
-### 1.常规使用
-##### a.列表模式
+### 1.列表模式
 	private SimpleListAdapter adapter;
 	
 	if (adapter == null) {
@@ -42,8 +41,10 @@
                         .setAlpha(0.3f)
                         .create()
                         .show(findViewById(R.id.tv));
+##### 注：自定义adapter
+	列表模式下可以继承GeneralAdapter<Data>，自己实现列表样式
 
-##### b.自定义模式
+### 2.自定义模式
 	TextView tv = new TextView(MainActivity.this);
                 ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 tv.setLayoutParams(lp);
@@ -75,8 +76,51 @@
                         })
                         .create()
                         .show(findViewById(R.id.tv));
-### 2.自定义adapter
-	列表模式下可以继承GeneralAdapter<Data>，自己实现列表样式
+
+### 3.时间选择器模式
+	new DateTimePickerWindowBuilder(MainActivity.this)
+                        .setOK("选定")
+                        .setOnDataTimeDialogListener(new OnDataTimeDialogListener() {
+                            @Override
+                            public void onOKClicked(@NotNull String dateTimeFormat, long dateTime) {
+                                Toast.makeText(getBaseContext(), dateTimeFormat, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCancelClicked() {
+
+                            }
+
+                            @Override
+                            public void onOutsideClicked() {
+
+                            }
+                        })
+                        //起始时间，不设置默认1-1-1 0:0
+                        .setDateTimeStart(1995, 3, 20, 0, 0)
+                        //终止时间，不设置默认9999-12-31 23:59
+                        .setDateTimeEnd(2222, 8, 8, 23, 59)
+                        //默认显示时间，不设置默认当前时间
+                        .setDateTimeInit(2018,10,22,10,29)
+                        .setOK("好的")
+                        .setCancel("取消")
+                        //设置是否能点击空白处取消（对返回键无效，待改进）
+                        .setCancelable(false)
+                        //设置滚轮分割线颜色（同时也是顶部Tab的选中颜色）
+                        .setDividerColor(Color.parseColor("#1069C2"))
+                        //滚轮聚焦文字的颜色（同时也是顶部Tab的选中文字颜色）
+                        .setTextColorFocus(Color.parseColor("#F10606"))
+                        //滚轮正常文字的颜色（同时也是顶部Tab的非选中文字颜色）
+                        .setTextColorNormal(getResources().getColor(R.color.colorAccent))
+                        //设置滚轮可见项数量
+                        .setVisibleItemCount(7)
+                        //设置滚轮分割线宽度比例
+                        .setDividerWidthRatio(0.7f)
+                        .create()
+                        .show(findViewById(R.id.bt_data_picker));
+
 
 ## BUG反馈
 	请在Github直接提，或者邮箱找我710267819@qq.com
+	
+	
