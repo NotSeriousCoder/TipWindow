@@ -14,24 +14,24 @@ import com.bingor.poptipwindow.view.wheel.WheelItem
  */
 class UniversalPickerWindowBuilder : TipWindowBuilder<UniversalPickerWindowBuilder> {
 
-    constructor(context: Context) : super(context) {
-        tipWindow.contentView = UniversalPickerView(context)
+    constructor(context: Context, tipType: Int) : super(context, tipType) {
+        tip.contentView = UniversalPickerView(context)
     }
 
     fun setOK(textOK: String): UniversalPickerWindowBuilder {
-        tipWindow.textOK = textOK
+        tip.textOK = textOK
         return this
     }
 
     fun setCancel(textCancel: String): UniversalPickerWindowBuilder {
-        tipWindow.textCancel = textCancel
+        tip.textCancel = textCancel
         return this
     }
 
     fun setOnDataSelectedListener(onDataSelectedListener: OnDataSelectedListener): UniversalPickerWindowBuilder {
-        tipWindow.onWindowStateChangedListener = object : OnWindowStateChangedListener {
+        tip.onWindowStateChangedListener = object : OnWindowStateChangedListener {
             override fun onOKClicked() {
-                var picker = tipWindow.contentView as UniversalPickerView
+                var picker = tip.contentView as UniversalPickerView
                 onDataSelectedListener.onOKClicked(picker.currentItems, picker.currentPosition)
             }
 
@@ -47,48 +47,48 @@ class UniversalPickerWindowBuilder : TipWindowBuilder<UniversalPickerWindowBuild
     }
 
     fun setLineSpaceMultiplier(@IntRange(from = 2, to = 4) lineSpaceMultiplier: Int): UniversalPickerWindowBuilder {
-        (tipWindow.contentView as UniversalPickerView).setLineSpaceMultiplier(lineSpaceMultiplier)
+        (tip.contentView as UniversalPickerView).setLineSpaceMultiplier(lineSpaceMultiplier)
         return this
     }
 
     fun setTextSize(textSizePX: Int): UniversalPickerWindowBuilder {
-        (tipWindow.contentView as UniversalPickerView).setTextSize(textSizePX)
+        (tip.contentView as UniversalPickerView).setTextSize(textSizePX)
         return this
     }
 
     fun setTextColorNormal(@ColorInt textColorNormal: Int): UniversalPickerWindowBuilder {
-        (tipWindow.contentView as UniversalPickerView).setTextColorNormal(textColorNormal)
+        (tip.contentView as UniversalPickerView).setTextColorNormal(textColorNormal)
         return this
     }
 
     fun setTextColorFocus(@ColorInt textColorFocus: Int): UniversalPickerWindowBuilder {
-        (tipWindow.contentView as UniversalPickerView).setTextColorFocus(textColorFocus)
+        (tip.contentView as UniversalPickerView).setTextColorFocus(textColorFocus)
         return this
     }
 
     fun setDividerWidthRatio(@FloatRange(from = 0.0, to = 1.0) dividerWidthRatio: Float): UniversalPickerWindowBuilder {
-        (tipWindow.contentView as UniversalPickerView).setDividerWidthRatio(dividerWidthRatio)
+        (tip.contentView as UniversalPickerView).setDividerWidthRatio(dividerWidthRatio)
         return this
     }
 
     fun setDividerColor(@ColorInt dividerColor: Int): UniversalPickerWindowBuilder {
-        (tipWindow.contentView as UniversalPickerView).setDividerColor(dividerColor)
+        (tip.contentView as UniversalPickerView).setDividerColor(dividerColor)
         return this
     }
 
     fun setVisibleItemCount(visibleItemCount: Int): UniversalPickerWindowBuilder {
-        (tipWindow.contentView as UniversalPickerView).setVisibleItemCount(visibleItemCount)
+        (tip.contentView as UniversalPickerView).setVisibleItemCount(visibleItemCount)
         return this
     }
 
     fun setCycleable(cycleable: Boolean): UniversalPickerWindowBuilder {
-        (tipWindow.contentView as UniversalPickerView).setCycleable(cycleable)
+        (tip.contentView as UniversalPickerView).setCycleable(cycleable)
         return this
     }
 
 
     fun setDatas(datas: List<WheelItem>): UniversalPickerWindowBuilder {
-        (tipWindow.contentView as UniversalPickerView).setDatas(datas)
+        (tip.contentView as UniversalPickerView).setDatas(datas)
         return this
     }
 }

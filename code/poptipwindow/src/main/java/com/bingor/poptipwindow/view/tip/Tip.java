@@ -1,33 +1,20 @@
-package com.bingor.poptipwindow;
+package com.bingor.poptipwindow.view.tip;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.FloatRange;
+import android.support.annotation.IntRange;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.ActionMode;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.SearchEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bingor.poptipwindow.R;
 import com.bingor.poptipwindow.adapter.GeneralAdapter;
 import com.bingor.poptipwindow.impl.OnAdapterStateChangeListener;
 import com.bingor.poptipwindow.impl.OnItemClickListener;
@@ -35,166 +22,37 @@ import com.bingor.poptipwindow.impl.OnWindowStateChangedListener;
 import com.bingor.poptipwindow.util.UnitConverter;
 
 /**
- * Created by HXB on 2018/9/19.
+ * Created by HXB on 2018/10/22.
  */
-public class TipWindow implements KeyEvent.Callback {
+public abstract class Tip {
     //通用
-    private Context context;
-    private View rootView;
-    private PopupWindow window;
-    private int alpha = 50;
-    private View parent;
-    private boolean cancelable = true;
+    protected Context context;
+    protected View rootView;
+    protected int alpha = 50;
+    protected View parent;
+    protected boolean cancelable = true;
 
     //列表模式
-    private ListView lvList;
-    private GeneralAdapter adapter;
-    private int maxHeight;
-    private OnItemClickListener onItemClickListener;
+    protected ListView lvList;
+    protected GeneralAdapter adapter;
+    protected int maxHeight;
+    protected OnItemClickListener onItemClickListener;
 
     //普通模式
-    private LinearLayout contentParent;
-    private View contentView, okCancelPadding;
-    private TextView tvContent;
-    private TextView tvOK, tvCancel;
-    private String textOK, textCancel, textContent;
-    private OnWindowStateChangedListener onWindowStateChangedListener;
-    private boolean contentNeedPaddingTop = true;
+    protected LinearLayout contentParent;
+    protected View contentView, okCancelPadding;
+    protected TextView tvContent;
+    protected TextView tvOK, tvCancel;
+    protected String textOK, textCancel, textContent;
+    protected OnWindowStateChangedListener onWindowStateChangedListener;
+    protected boolean contentNeedPaddingTop = true;
 
-    public TipWindow(final Activity activity) {
-//        Window w = activity.getWindow();
-//        w.setCallback(new Window.Callback() {
-//            @Override
-//            public boolean dispatchKeyEvent(KeyEvent event) {
-//                Log.d("HXB", "dispatchKeyEvent");
-////                Toast.makeText(activity, "dispatchKeyEvent==" + event.getAction(), Toast.LENGTH_SHORT).show();
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean dispatchKeyShortcutEvent(KeyEvent event) {
-//                Log.d("HXB", "dispatchKeyShortcutEvent");
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean dispatchTouchEvent(MotionEvent event) {
-//                Log.d("HXB", "dispatchTouchEvent");
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean dispatchTrackballEvent(MotionEvent event) {
-//                Log.d("HXB", "dispatchTrackballEvent");
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean dispatchGenericMotionEvent(MotionEvent event) {
-//                Log.d("HXB", "dispatchGenericMotionEvent");
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
-//                Log.d("HXB", "dispatchPopulateAccessibilityEvent");
-//                return true;
-//            }
-//
-//            @Override
-//            public View onCreatePanelView(int featureId) {
-//                return null;
-//            }
-//
-//            @Override
-//            public boolean onCreatePanelMenu(int featureId, Menu menu) {
-//                Log.d("HXB", "onCreatePanelMenu");
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onPreparePanel(int featureId, View view, Menu menu) {
-//                Log.d("HXB", "onPreparePanel");
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onMenuOpened(int featureId, Menu menu) {
-//                Log.d("HXB", "onMenuOpened");
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onMenuItemSelected(int featureId, MenuItem item) {
-//                Log.d("HXB", "onMenuItemSelected");
-//                return true;
-//            }
-//
-//            @Override
-//            public void onWindowAttributesChanged(WindowManager.LayoutParams attrs) {
-//
-//            }
-//
-//            @Override
-//            public void onContentChanged() {
-//
-//            }
-//
-//            @Override
-//            public void onWindowFocusChanged(boolean hasFocus) {
-//
-//            }
-//
-//            @Override
-//            public void onAttachedToWindow() {
-//
-//            }
-//
-//            @Override
-//            public void onDetachedFromWindow() {
-//
-//            }
-//
-//            @Override
-//            public void onPanelClosed(int featureId, Menu menu) {
-//
-//            }
-//
-//            @Override
-//            public boolean onSearchRequested() {
-//                Log.d("HXB", "onSearchRequested");
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onSearchRequested(SearchEvent searchEvent) {
-//                Log.d("HXB", "onSearchRequested");
-//                return true;
-//            }
-//
-//            @Override
-//            public ActionMode onWindowStartingActionMode(ActionMode.Callback callback) {
-//                return null;
-//            }
-//
-//            @Override
-//            public ActionMode onWindowStartingActionMode(ActionMode.Callback callback, int type) {
-//                return null;
-//            }
-//
-//            @Override
-//            public void onActionModeStarted(ActionMode mode) {
-//
-//            }
-//
-//            @Override
-//            public void onActionModeFinished(ActionMode mode) {
-//
-//            }
-//        });
-    }
-
-    public void init() throws Exception {
+    /**
+     * 先找到各种View
+     *
+     * @throws Exception
+     */
+    protected void findView() throws Exception {
         if ((contentView != null || !TextUtils.isEmpty(textContent)) && adapter != null) {
             throw new Exception("TipWindow can not be contentView mode and list mode contemporaneously");
         }
@@ -211,7 +69,6 @@ public class TipWindow implements KeyEvent.Callback {
             if (!contentNeedPaddingTop) {
                 parent.setPadding(parent.getPaddingLeft(), 0, parent.getPaddingRight(), parent.getPaddingBottom());
             }
-            initContent();
         } else if (adapter != null) {
             if (maxHeight == 0) {
                 maxHeight = UnitConverter.dip2px(context, 30);
@@ -220,31 +77,15 @@ public class TipWindow implements KeyEvent.Callback {
             rootView = LayoutInflater.from(context).inflate(R.layout.view_tip_list, null, false);
             parent = rootView.findViewById(R.id.fl_m_view_tip_list_p_parent);
             lvList = rootView.findViewById(R.id.lv_m_view_tip_list_p_list);
+        }
+    }
+
+    protected void initViewContent() {
+        if (contentView != null || !TextUtils.isEmpty(textContent)) {
+            initContent();
+        } else if (adapter != null) {
             initList();
         }
-
-
-        // 创建PopupWindow对象，其中：
-        // 第一个参数是用于PopupWindow中的View，第二个参数是PopupWindow的宽度，
-        // 第三个参数是PopupWindow的高度，第四个参数指定PopupWindow能否获得焦点
-        window = new PopupWindow(rootView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
-        // 设置PopupWindow的背景
-        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#000000"));
-        colorDrawable.setAlpha(alpha);
-        window.setBackgroundDrawable(colorDrawable);
-        // 设置PopupWindow是否能响应外部点击事件
-        window.setOutsideTouchable(true);
-        // 设置PopupWindow是否能响应点击事件
-        window.setTouchable(true);
-        /*window.setFocusable(true);
-        window.setTouchInterceptor(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Toast.makeText(context, "onTouch", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });*/
-        window.setAnimationStyle(R.style.animNull);
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -258,7 +99,7 @@ public class TipWindow implements KeyEvent.Callback {
         });
     }
 
-    private void initList() {
+    protected void initList() {
         adapter.setOnAdapterStateChangeListener(new OnAdapterStateChangeListener() {
             @Override
             public void onItemDeleteClick(int position, Object data) {
@@ -291,7 +132,7 @@ public class TipWindow implements KeyEvent.Callback {
         }
     }
 
-    private void initContent() {
+    protected void initContent() {
         if (!TextUtils.isEmpty(textOK)) {
             tvOK.setText(textOK);
         }
@@ -343,9 +184,7 @@ public class TipWindow implements KeyEvent.Callback {
     }
 
     public void show(View anchor) {
-//        window.showAsDropDown(ViewUtil.findRootView(anchor), 0, 0);
-//        window.showAsDropDown(anchor, 0, 0);
-        window.showAtLocation(anchor.getRootView(), Gravity.START | Gravity.BOTTOM, 0, 0);
+        showTip(anchor);
         parent.startAnimation(AnimationUtils.loadAnimation(context, R.anim.translate_in));
     }
 
@@ -359,7 +198,7 @@ public class TipWindow implements KeyEvent.Callback {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                window.dismiss();
+                dismissTip();
             }
 
             @Override
@@ -369,6 +208,19 @@ public class TipWindow implements KeyEvent.Callback {
         });
         parent.startAnimation(animation);
     }
+
+    public void init() throws Exception {
+        findView();
+        initViewContent();
+        initTip();
+    }
+
+
+    protected abstract void initTip();
+
+    protected abstract void showTip(View anchor);
+
+    protected abstract void dismissTip();
 
 
     //////////////////////////////getset////////////////////////////////
@@ -408,7 +260,7 @@ public class TipWindow implements KeyEvent.Callback {
         return alpha;
     }
 
-    public void setAlpha(int alpha) {
+    public void setAlpha(@IntRange(from = 0, to = 255) int alpha) {
         this.alpha = alpha;
     }
 
@@ -463,34 +315,4 @@ public class TipWindow implements KeyEvent.Callback {
     public void setContentNeedPaddingTop(boolean contentNeedPaddingTop) {
         this.contentNeedPaddingTop = contentNeedPaddingTop;
     }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.KEYCODE_BACK) {
-            Toast.makeText(context, "KEYCODE_BACK", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        return false;
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.KEYCODE_BACK) {
-
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean onKeyMultiple(int keyCode, int count, KeyEvent event) {
-        return false;
-    }
-    //////////////////////////////getset////////////////////////////////
-
 }

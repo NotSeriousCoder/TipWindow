@@ -17,12 +17,14 @@ import com.bingor.poptipwindow.adapter.SimpleListAdapter;
 import com.bingor.poptipwindow.builder.CustomTipWindowBuilder;
 import com.bingor.poptipwindow.builder.DateTimePickerWindowBuilder;
 import com.bingor.poptipwindow.builder.ListTipWindowBuilder;
+import com.bingor.poptipwindow.builder.TipWindowBuilder;
 import com.bingor.poptipwindow.builder.UniversalPickerWindowBuilder;
 import com.bingor.poptipwindow.impl.OnDataSelectedListener;
 import com.bingor.poptipwindow.impl.OnDataTimeDialogListener;
 import com.bingor.poptipwindow.impl.OnItemClickListener;
 import com.bingor.poptipwindow.impl.OnWindowStateChangedListener;
 import com.bingor.poptipwindow.view.picker.datetimepicker.DateTimePickerView;
+import com.bingor.poptipwindow.view.tip.CustomDialog;
 import com.bingor.poptipwindow.view.wheel.NumberWheelView;
 import com.bingor.poptipwindow.view.wheel.WheelItem;
 import com.bingor.poptipwindow.view.wheel.WheelView;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.tv).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.bt_list).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (adapter == null) {
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                     adapter.setNeedDelete(false);
                     adapter.setNeedTag(true);
                 }
-                new ListTipWindowBuilder(MainActivity.this)
+                new ListTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_DIALOG)
                         .setAdapter(adapter)
                         .setCancelable(false)
                         .setOnItemClickListener(new OnItemClickListener<String>() {
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                         })
                         .setAlpha(0.3f)
                         .create()
-                        .show(findViewById(R.id.tv));
+                        .show(findViewById(R.id.bt_list));
             }
         });
 
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 tv.setLayoutParams(lp);
                 tv.setText("确定要删除这个文件吗？");
-                new CustomTipWindowBuilder(MainActivity.this)
+                new CustomTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_DIALOG)
                         .setOK("好的")
                         .setCancel("不要")
                         .setContentView(tv)
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_date_time_picker).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DateTimePickerWindowBuilder(MainActivity.this)
+                new DateTimePickerWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_DIALOG)
                         .setOK("选定")
                         .setOnDataTimeDialogListener(new OnDataTimeDialogListener() {
                             @Override
@@ -153,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
                         .setTextColorFocus(Color.parseColor("#F10606"))
                         //滚轮正常文字的颜色（同时也是顶部Tab的非选中文字颜色）
                         .setTextColorNormal(getResources().getColor(R.color.colorAccent))
+                        .setAlpha(0.2f)
                         //设置滚轮可见项数量
                         .setVisibleItemCount(7)
                         //设置滚轮分割线宽度比例
@@ -237,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
                 tb_1c.setChildren(d_2c);
                 d_1.add(tb_1c);
 
-                new UniversalPickerWindowBuilder(MainActivity.this)
+                new UniversalPickerWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_DIALOG)
                         .setOK("选定")
                         .setOnDataSelectedListener(new OnDataSelectedListener() {
                             @Override
@@ -267,23 +270,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        NumberWheelView wheelView1 = findViewById(R.id.wv_test1);
-//        NumberWheelView wheelView2 = findViewById(R.id.wv_test2);
-//        NumberWheelView wheelView3 = findViewById(R.id.wv_test3);
-//        NumberWheelView wheelView4 = findViewById(R.id.wv_test4);
-//        NumberWheelView wheelView5 = findViewById(R.id.wv_test5);
-//        wheelView1.setItems(0, 999, 0);
-//        wheelView2.setItems(0, 999, 0);
-//        wheelView3.setItems(0, 999, 0);
-//        wheelView4.setItems(0, 999, 0);
-//        wheelView5.setItems(0, 999, 0);
-
-//        DateTimePickerView dateTimePickerView = findViewById(R.id.upv_test);
-//        dateTimePickerView
-//                .setDateTimeStart(1995, 3, 8, 10, 30)
-//                .setDateTimeEnd(2000, 1, 15, 11, 10)
-//                .setTextColorNormal(Color.parseColor("#a12185"))
-//                .init();
+        findViewById(R.id.bt_test_dialog).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new CustomDialog(MainActivity.this)
+                        .show();
+            }
+        });
     }
 
 }
