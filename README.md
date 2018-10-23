@@ -104,6 +104,8 @@
                         .setDateTimeInit(2018, 10, 22, 10, 29)
                         .setOK("好的")
                         .setCancel("取消")
+			//设置空白处不透明度（0=完全透明 1=完全不透明）
+                        .setAlpha(0.2f)
                         //设置是否能点击空白处取消（对返回键无效，待改进）
                         .setCancelable(false)
                         //设置滚轮分割线颜色（同时也是顶部Tab的选中颜色）
