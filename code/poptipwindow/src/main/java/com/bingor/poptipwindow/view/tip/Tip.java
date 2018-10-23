@@ -20,20 +20,26 @@ import com.bingor.poptipwindow.R;
 import com.bingor.poptipwindow.adapter.GeneralAdapter;
 import com.bingor.poptipwindow.impl.OnAdapterStateChangeListener;
 import com.bingor.poptipwindow.impl.OnItemClickListener;
+import com.bingor.poptipwindow.impl.OnTipBoxStateChangedListener;
 import com.bingor.poptipwindow.impl.OnWindowStateChangedListener;
 import com.bingor.poptipwindow.util.UnitConverter;
 
 /**
+ * 提示窗的抽象类
+ * 1.这里定义了提示窗的类型（列表模式/自定义模式）
+ * 2.这里只初始化提示窗的视图，但是未声明提示窗的载体，载体需要在子类中声明
  * Created by HXB on 2018/10/22.
  */
 public abstract class Tip {
     //通用
     protected Context context;
+    //视图最外层View
     protected View rootView;
     protected int alpha = 50;
+    //执行动画的View
     protected View parent;
     protected boolean cancelable = true;
-    protected OnTipStateChangedListener onTipStateChangedListener;
+    protected OnTipBoxStateChangedListener onTipBoxStateChangedListener;
 
     //列表模式
     protected ListView lvList;
@@ -41,7 +47,7 @@ public abstract class Tip {
     protected int maxHeight;
     protected OnItemClickListener onItemClickListener;
 
-    //普通模式
+    //自定义模式
     protected LinearLayout contentParent;
     protected View contentView, okCancelPadding;
     protected TextView tvContent;
@@ -50,8 +56,27 @@ public abstract class Tip {
     protected OnWindowStateChangedListener onWindowStateChangedListener;
     protected boolean contentNeedPaddingTop = true, wrapContent = false, center = false;
 
+
+    //////////////////////////////public fun/////////////////////////////////
+
     /**
-     * 先找到各种View
+     * 初始化方法
+     *
+     * @throws Exception
+     */
+    public void init() throws Exception {
+        findView();
+        initViewContent();
+        initTip();
+    }
+
+
+    //////////////////////////////public fun end/////////////////////////////////
+
+
+    /**
+     * 将提示窗的视图先初始化
+     * 根据contentView、textContent和adapter会判断初始化哪种类型的视图
      *
      * @throws Exception
      */
@@ -69,6 +94,10 @@ public abstract class Tip {
             tvCancel = rootView.findViewById(R.id.tv_m_view_tip_ok_cancel_p_cancel);
             okCancelPadding = rootView.findViewById(R.id.view_m_view_tip_ok_cancel_p_ok_cancel_padding);
 
+            /**
+             * 某些情况下不需要顶部有padding，即可通过contentNeedPaddingTop = false来设置
+             * {@link Tip#setContentNeedPaddingTop(boolean)}
+             */
             if (!contentNeedPaddingTop) {
                 parent.setPadding(parent.getPaddingLeft(), 0, parent.getPaddingRight(), parent.getPaddingBottom());
             }
@@ -83,15 +112,23 @@ public abstract class Tip {
         }
     }
 
+    /**
+     * 将参数设置到视图中
+     */
     protected void initViewContent() {
         if (contentView != null || !TextUtils.isEmpty(textContent)) {
             initContent();
         } else if (adapter != null) {
             initList();
         }
+
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /**
+                 * 这里控制是否能点击视图外区域关闭窗体
+                 * {@link Tip#setCancelable(boolean)}
+                 */
                 if (cancelable) {
                     dismiss();
                     if (onWindowStateChangedListener != null) {
@@ -102,6 +139,9 @@ public abstract class Tip {
         });
     }
 
+    /**
+     * 初始化列表模式下的数据
+     */
     protected void initList() {
         adapter.setOnAdapterStateChangeListener(new OnAdapterStateChangeListener() {
             @Override
@@ -135,6 +175,9 @@ public abstract class Tip {
         }
     }
 
+    /**
+     * 初始化自定义模式下的数据
+     */
     protected void initContent() {
         if (!TextUtils.isEmpty(textOK)) {
             tvOK.setText(textOK);
@@ -178,6 +221,10 @@ public abstract class Tip {
             contentParent.addView(contentView);
         }
 
+        /**
+         * wrapContent决定整个提示框的窗体是否包裹内容
+         * {@link Tip#setWrapContent(boolean)}
+         */
         if (!wrapContent) {
             okCancelPadding.setVisibility(View.VISIBLE);
         } else {
@@ -208,8 +255,8 @@ public abstract class Tip {
         } else {
             parent.startAnimation(AnimationUtils.loadAnimation(context, R.anim.translate_in));
         }
-        if (onTipStateChangedListener != null) {
-            onTipStateChangedListener.onTipShown();
+        if (onTipBoxStateChangedListener != null) {
+            onTipBoxStateChangedListener.onTipBoxShown();
         }
     }
 
@@ -237,15 +284,10 @@ public abstract class Tip {
             }
         });
         parent.startAnimation(animation);
-        if (onTipStateChangedListener != null) {
-            onTipStateChangedListener.onTipDismissed();
+        if (onTipBoxStateChangedListener != null) {
+            onTipBoxStateChangedListener.onTipBoxDismissed();
         }
-    }
-
-    public void init() throws Exception {
-        findView();
-        initViewContent();
-        initTip();
+        context = null;
     }
 
 
@@ -357,20 +399,15 @@ public abstract class Tip {
         this.center = center;
     }
 
-    public OnTipStateChangedListener getOnTipStateChangedListener() {
-        return onTipStateChangedListener;
+    public OnTipBoxStateChangedListener getOnTipBoxStateChangedListener() {
+        return onTipBoxStateChangedListener;
     }
 
-    public void setOnTipStateChangedListener(OnTipStateChangedListener onTipStateChangedListener) {
-        this.onTipStateChangedListener = onTipStateChangedListener;
+    public void setOnTipBoxStateChangedListener(OnTipBoxStateChangedListener onTipBoxStateChangedListener) {
+        this.onTipBoxStateChangedListener = onTipBoxStateChangedListener;
     }
 
-    ///////////////////////////////////////////////Listener//////////////////////////////////////////////////////////////
 
-    public interface OnTipStateChangedListener {
-        void onTipShown();
 
-        void onTipDismissed();
-    }
 
 }

@@ -13,7 +13,7 @@ import java.util.List;
  * Created by HXB on 2017-09-03.
  */
 
-public abstract class   GeneralAdapter<Data> extends BaseAdapter {
+public abstract class GeneralAdapter<Data> extends BaseAdapter {
     protected Context context;
     protected List<Data> datas;
     protected LayoutInflater inflater;
