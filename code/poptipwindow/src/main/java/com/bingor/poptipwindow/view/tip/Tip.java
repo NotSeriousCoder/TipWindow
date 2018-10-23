@@ -1,6 +1,8 @@
 package com.bingor.poptipwindow.view.tip;
 
 import android.content.Context;
+import android.support.annotation.FloatRange;
+import android.support.annotation.IntRange;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -181,7 +183,7 @@ public abstract class Tip {
         });
     }
 
-    public void show(View anchor){
+    public void show(View anchor) {
         showTip(anchor);
         parent.startAnimation(AnimationUtils.loadAnimation(context, R.anim.translate_in));
     }
@@ -215,7 +217,9 @@ public abstract class Tip {
 
 
     protected abstract void initTip();
+
     protected abstract void showTip(View anchor);
+
     protected abstract void dismissTip();
 
 
@@ -256,7 +260,7 @@ public abstract class Tip {
         return alpha;
     }
 
-    public void setAlpha(int alpha) {
+    public void setAlpha(@IntRange(from = 0, to = 255) int alpha) {
         this.alpha = alpha;
     }
 

@@ -1,9 +1,8 @@
 package com.bingor.poptipwindow.view.tip;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 
 /**
@@ -15,7 +14,6 @@ public class TipDialog extends Tip {
     @Override
     protected void initTip() {
         dialog = new CustomDialog(context);
-        rootView.setAlpha(alpha);
         dialog.setContentView(rootView);
         dialog.setCancelable(cancelable);
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -24,17 +22,18 @@ public class TipDialog extends Tip {
 
             }
         });
+        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#000000"));
+        colorDrawable.setAlpha(alpha);
+        dialog.getWindow().setBackgroundDrawable(colorDrawable);
     }
 
     @Override
     protected void showTip(View anchor) {
         dialog.show();
-//        window.showAtLocation(anchor.getRootView(), Gravity.START | Gravity.BOTTOM, 0, 0);
     }
 
     @Override
     protected void dismissTip() {
         dialog.dismiss();
-//        window.dismiss();
     }
 }

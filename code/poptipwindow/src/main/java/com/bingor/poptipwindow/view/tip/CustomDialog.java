@@ -2,6 +2,8 @@ package com.bingor.poptipwindow.view.tip;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.ViewGroup;
 import android.view.Window;
 
@@ -14,16 +16,19 @@ import com.bingor.poptipwindow.R;
 
 public class CustomDialog extends Dialog {
     public CustomDialog(Context context) {
-        super(context);
+        this(context, R.style.customDialogStyle);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        this.getWindow().setWindowAnimations(R.style.dialogWindowAnim);
+    }
+
+    public CustomDialog(Context context, int themeResId) {
+        super(context, themeResId);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
 }

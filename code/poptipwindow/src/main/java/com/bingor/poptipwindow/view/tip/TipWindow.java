@@ -1,31 +1,18 @@
 package com.bingor.poptipwindow.view.tip;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.TextView;
+
 import com.bingor.poptipwindow.R;
-import com.bingor.poptipwindow.adapter.GeneralAdapter;
-import com.bingor.poptipwindow.impl.OnAdapterStateChangeListener;
-import com.bingor.poptipwindow.impl.OnItemClickListener;
-import com.bingor.poptipwindow.impl.OnWindowStateChangedListener;
-import com.bingor.poptipwindow.util.UnitConverter;
 
 /**
  * Created by HXB on 2018/9/19.
  */
-public class TipWindow extends Tip  {
+public class TipWindow extends Tip {
     private PopupWindow window;
 
     @Override

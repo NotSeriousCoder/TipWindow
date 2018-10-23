@@ -24,6 +24,7 @@ import com.bingor.poptipwindow.impl.OnDataTimeDialogListener;
 import com.bingor.poptipwindow.impl.OnItemClickListener;
 import com.bingor.poptipwindow.impl.OnWindowStateChangedListener;
 import com.bingor.poptipwindow.view.picker.datetimepicker.DateTimePickerView;
+import com.bingor.poptipwindow.view.tip.CustomDialog;
 import com.bingor.poptipwindow.view.wheel.NumberWheelView;
 import com.bingor.poptipwindow.view.wheel.WheelItem;
 import com.bingor.poptipwindow.view.wheel.WheelView;
@@ -154,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
                         .setTextColorFocus(Color.parseColor("#F10606"))
                         //滚轮正常文字的颜色（同时也是顶部Tab的非选中文字颜色）
                         .setTextColorNormal(getResources().getColor(R.color.colorAccent))
+                        .setAlpha(0.2f)
                         //设置滚轮可见项数量
                         .setVisibleItemCount(7)
                         //设置滚轮分割线宽度比例
@@ -268,23 +270,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        NumberWheelView wheelView1 = findViewById(R.id.wv_test1);
-//        NumberWheelView wheelView2 = findViewById(R.id.wv_test2);
-//        NumberWheelView wheelView3 = findViewById(R.id.wv_test3);
-//        NumberWheelView wheelView4 = findViewById(R.id.wv_test4);
-//        NumberWheelView wheelView5 = findViewById(R.id.wv_test5);
-//        wheelView1.setItems(0, 999, 0);
-//        wheelView2.setItems(0, 999, 0);
-//        wheelView3.setItems(0, 999, 0);
-//        wheelView4.setItems(0, 999, 0);
-//        wheelView5.setItems(0, 999, 0);
-
-//        DateTimePickerView dateTimePickerView = findViewById(R.id.upv_test);
-//        dateTimePickerView
-//                .setDateTimeStart(1995, 3, 8, 10, 30)
-//                .setDateTimeEnd(2000, 1, 15, 11, 10)
-//                .setTextColorNormal(Color.parseColor("#a12185"))
-//                .init();
+        findViewById(R.id.bt_test_dialog).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new CustomDialog(MainActivity.this)
+                        .show();
+            }
+        });
     }
 
 }
