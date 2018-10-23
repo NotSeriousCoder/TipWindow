@@ -4,12 +4,14 @@ import android.content.Context;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,6 +33,7 @@ public abstract class Tip {
     protected int alpha = 50;
     protected View parent;
     protected boolean cancelable = true;
+    protected OnTipStateChangedListener onTipStateChangedListener;
 
     //列表模式
     protected ListView lvList;
@@ -45,7 +48,7 @@ public abstract class Tip {
     protected TextView tvOK, tvCancel;
     protected String textOK, textCancel, textContent;
     protected OnWindowStateChangedListener onWindowStateChangedListener;
-    protected boolean contentNeedPaddingTop = true;
+    protected boolean contentNeedPaddingTop = true, wrapContent = false, center = false;
 
     /**
      * 先找到各种View
@@ -175,6 +178,21 @@ public abstract class Tip {
             contentParent.addView(contentView);
         }
 
+        if (!wrapContent) {
+            okCancelPadding.setVisibility(View.VISIBLE);
+        } else {
+            okCancelPadding.setVisibility(View.GONE);
+        }
+
+        if (center) {
+//            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) rootView.getLayoutParams();
+//            lp.gravity = Gravity.CENTER;
+//            rootView.setLayoutParams(lp);
+
+            LinearLayout linearLayout = (LinearLayout) rootView;
+            linearLayout.setGravity(Gravity.CENTER);
+        }
+
         parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,11 +203,23 @@ public abstract class Tip {
 
     public void show(View anchor) {
         showTip(anchor);
-        parent.startAnimation(AnimationUtils.loadAnimation(context, R.anim.translate_in));
+        if (center) {
+            parent.startAnimation(AnimationUtils.loadAnimation(context, R.anim.translate_in_long));
+        } else {
+            parent.startAnimation(AnimationUtils.loadAnimation(context, R.anim.translate_in));
+        }
+        if (onTipStateChangedListener != null) {
+            onTipStateChangedListener.onTipShown();
+        }
     }
 
     public void dismiss() {
-        Animation animation = AnimationUtils.loadAnimation(context, R.anim.translate_out);
+        Animation animation = null;
+        if (center) {
+            animation = AnimationUtils.loadAnimation(context, R.anim.translate_out_long);
+        } else {
+            animation = AnimationUtils.loadAnimation(context, R.anim.translate_out);
+        }
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -207,6 +237,9 @@ public abstract class Tip {
             }
         });
         parent.startAnimation(animation);
+        if (onTipStateChangedListener != null) {
+            onTipStateChangedListener.onTipDismissed();
+        }
     }
 
     public void init() throws Exception {
@@ -315,4 +348,29 @@ public abstract class Tip {
     public void setContentNeedPaddingTop(boolean contentNeedPaddingTop) {
         this.contentNeedPaddingTop = contentNeedPaddingTop;
     }
+
+    public void setWrapContent(boolean wrapContent) {
+        this.wrapContent = wrapContent;
+    }
+
+    public void setContentCenter(boolean center) {
+        this.center = center;
+    }
+
+    public OnTipStateChangedListener getOnTipStateChangedListener() {
+        return onTipStateChangedListener;
+    }
+
+    public void setOnTipStateChangedListener(OnTipStateChangedListener onTipStateChangedListener) {
+        this.onTipStateChangedListener = onTipStateChangedListener;
+    }
+
+    ///////////////////////////////////////////////Listener//////////////////////////////////////////////////////////////
+
+    public interface OnTipStateChangedListener {
+        void onTipShown();
+
+        void onTipDismissed();
+    }
+
 }

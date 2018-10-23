@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 
+import com.bingor.poptipwindow.view.LoadingView;
+
 /**
  * Created by HXB on 2018/10/22.
  */
@@ -19,7 +21,19 @@ public class TipDialog extends Tip {
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-
+                if (contentView != null && contentView instanceof LoadingView) {
+                    LoadingView loadingView = (LoadingView) contentView;
+                    loadingView.stopAnim();
+                }
+            }
+        });
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                if (contentView != null && contentView instanceof LoadingView) {
+                    LoadingView loadingView = (LoadingView) contentView;
+                    loadingView.showAnim();
+                }
             }
         });
         ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#000000"));

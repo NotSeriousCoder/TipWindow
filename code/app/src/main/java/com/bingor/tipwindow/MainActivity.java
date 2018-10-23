@@ -19,6 +19,7 @@ import com.bingor.poptipwindow.builder.DateTimePickerWindowBuilder;
 import com.bingor.poptipwindow.builder.ListTipWindowBuilder;
 import com.bingor.poptipwindow.builder.TipWindowBuilder;
 import com.bingor.poptipwindow.builder.UniversalPickerWindowBuilder;
+import com.bingor.poptipwindow.builder.WaitingWindowBuilder;
 import com.bingor.poptipwindow.impl.OnDataSelectedListener;
 import com.bingor.poptipwindow.impl.OnDataTimeDialogListener;
 import com.bingor.poptipwindow.impl.OnItemClickListener;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     adapter.setNeedDelete(false);
                     adapter.setNeedTag(true);
                 }
-                new ListTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_DIALOG)
+                new ListTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
                         .setAdapter(adapter)
                         .setCancelable(false)
                         .setOnItemClickListener(new OnItemClickListener<String>() {
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 tv.setLayoutParams(lp);
                 tv.setText("确定要删除这个文件吗？");
-                new CustomTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_DIALOG)
+                new CustomTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
                         .setOK("好的")
                         .setCancel("不要")
                         .setContentView(tv)
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_date_time_picker).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DateTimePickerWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_DIALOG)
+                new DateTimePickerWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
                         .setOK("选定")
                         .setOnDataTimeDialogListener(new OnDataTimeDialogListener() {
                             @Override
@@ -241,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
                 tb_1c.setChildren(d_2c);
                 d_1.add(tb_1c);
 
-                new UniversalPickerWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_DIALOG)
+                new UniversalPickerWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
                         .setOK("选定")
                         .setOnDataSelectedListener(new OnDataSelectedListener() {
                             @Override
@@ -271,11 +272,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.bt_test_dialog).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.bt_waiting).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new CustomDialog(MainActivity.this)
-                        .show();
+
+                new WaitingWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
+                        .setMsg("读取中")
+                        .create()
+                        .show(findViewById(R.id.bt_data_picker));
             }
         });
     }

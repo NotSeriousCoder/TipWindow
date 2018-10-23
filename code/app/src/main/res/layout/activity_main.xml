@@ -33,10 +33,10 @@
         android:text="时间窗口" />
 
     <Button
-        android:id="@+id/bt_test_dialog"
+        android:id="@+id/bt_waiting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="测试弹窗" />
+        android:text="读取中" />
 
     <com.bingor.numbertipview.NumTipView
         android:id="@+id/ntv_m_frg_mine_p_msg_num"
