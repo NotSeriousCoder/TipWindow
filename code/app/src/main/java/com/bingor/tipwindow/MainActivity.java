@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
                         .setTextColorFocus(Color.parseColor("#F10606"))
                         //滚轮正常文字的颜色（同时也是顶部Tab的非选中文字颜色）
                         .setTextColorNormal(getResources().getColor(R.color.colorAccent))
+                        //设置空白处不透明度（0=完全透明 1=完全不透明）
                         .setAlpha(0.2f)
                         //设置滚轮可见项数量
                         .setVisibleItemCount(7)
