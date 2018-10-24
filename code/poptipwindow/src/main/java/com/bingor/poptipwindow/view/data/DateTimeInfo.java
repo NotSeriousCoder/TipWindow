@@ -5,6 +5,7 @@ import com.bingor.poptipwindow.util.DateTimeUtil;
 import java.util.Calendar;
 
 /**
+ * DateTimePickerView数据的Bean
  * Created by HXB on 2018/10/19.
  */
 public class DateTimeInfo {

@@ -2,7 +2,6 @@ package com.bingor.poptipwindow.view.picker;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
@@ -14,6 +13,7 @@ import android.widget.LinearLayout;
 import com.bingor.poptipwindow.R;
 
 /**
+ * 选择器基类
  * Created by HXB on 2018/10/17.
  */
 public abstract class Picker extends LinearLayout {
@@ -70,7 +70,6 @@ public abstract class Picker extends LinearLayout {
         setOrientation(LinearLayout.HORIZONTAL);
         setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     public int getLineSpaceMultiplier() {

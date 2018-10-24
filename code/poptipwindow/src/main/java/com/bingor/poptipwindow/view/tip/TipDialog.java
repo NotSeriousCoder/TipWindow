@@ -8,6 +8,7 @@ import android.view.View;
 import com.bingor.poptipwindow.view.LoadingView;
 
 /**
+ * 以Dialog为载体的提示窗
  * Created by HXB on 2018/10/22.
  */
 public class TipDialog extends Tip {
@@ -21,6 +22,7 @@ public class TipDialog extends Tip {
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
+                //LoadingView的情况下停止动画
                 if (contentView != null && contentView instanceof LoadingView) {
                     LoadingView loadingView = (LoadingView) contentView;
                     loadingView.stopAnim();
@@ -30,6 +32,7 @@ public class TipDialog extends Tip {
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
+                //LoadingView的情况下开始动画
                 if (contentView != null && contentView instanceof LoadingView) {
                     LoadingView loadingView = (LoadingView) contentView;
                     loadingView.showAnim();

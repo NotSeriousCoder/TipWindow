@@ -21,8 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import com.bingor.poptipwindow.impl.OnItemSelectListener;
 import com.bingor.poptipwindow.util.UnitConverter;
-import com.bingor.poptipwindow.view.OnItemSelectListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +33,10 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 滚轮
  * Created by HXB on 2018/10/16.
  */
 public abstract class WheelView<DataType> extends View {
-
     public static final float LINE_SPACE_MULTIPLIER = 2.0F;
     public static final int TEXT_PADDING = -1;
     public static final int TEXT_SIZE = 16;//单位为sp

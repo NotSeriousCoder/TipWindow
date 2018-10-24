@@ -232,10 +232,6 @@ public abstract class Tip {
         }
 
         if (center) {
-//            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) rootView.getLayoutParams();
-//            lp.gravity = Gravity.CENTER;
-//            rootView.setLayoutParams(lp);
-
             LinearLayout linearLayout = (LinearLayout) rootView;
             linearLayout.setGravity(Gravity.CENTER);
         }
@@ -290,11 +286,21 @@ public abstract class Tip {
         context = null;
     }
 
-
+    /**
+     * 初始化提示框载体
+     */
     protected abstract void initTip();
 
+    /**
+     * 显示提示窗
+     *
+     * @param anchor
+     */
     protected abstract void showTip(View anchor);
 
+    /**
+     * 关闭提示窗
+     */
     protected abstract void dismissTip();
 
 
@@ -406,8 +412,4 @@ public abstract class Tip {
     public void setOnTipBoxStateChangedListener(OnTipBoxStateChangedListener onTipBoxStateChangedListener) {
         this.onTipBoxStateChangedListener = onTipBoxStateChangedListener;
     }
-
-
-
-
 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 列表模式下的adapter基类
  * Created by HXB on 2017-09-03.
  */
 
@@ -17,6 +18,7 @@ public abstract class GeneralAdapter<Data> extends BaseAdapter {
     protected Context context;
     protected List<Data> datas;
     protected LayoutInflater inflater;
+    //选中项的位置
     protected int positionChecked;
     protected OnAdapterStateChangeListener<Data> onAdapterStateChangeListener;
 
@@ -131,6 +133,10 @@ public abstract class GeneralAdapter<Data> extends BaseAdapter {
         return onAdapterStateChangeListener;
     }
 
+    /**
+     * {@link com.bingor.poptipwindow.impl.OnAdapterStateChangeListener}
+     * @param onAdapterStateChangeListener
+     */
     public void setOnAdapterStateChangeListener(OnAdapterStateChangeListener onAdapterStateChangeListener) {
         this.onAdapterStateChangeListener = onAdapterStateChangeListener;
     }

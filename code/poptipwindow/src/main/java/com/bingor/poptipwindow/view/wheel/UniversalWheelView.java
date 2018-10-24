@@ -9,6 +9,7 @@ import com.bingor.poptipwindow.view.wheel.WheelItem;
 import java.util.List;
 
 /**
+ * 通用数据滚轮
  * Created by HXB on 2018/10/16.
  */
 public class UniversalWheelView<T extends WheelItem> extends WheelView<T> {

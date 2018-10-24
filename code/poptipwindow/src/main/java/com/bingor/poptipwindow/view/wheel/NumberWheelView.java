@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import java.util.List;
 
 /**
+ * 数字滚轮
  * Created by HXB on 2018/10/16.
  */
 public class NumberWheelView extends WheelView<Integer> {

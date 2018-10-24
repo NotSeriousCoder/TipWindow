@@ -4,7 +4,6 @@ import android.content.Context
 import android.support.annotation.ColorInt
 import android.support.annotation.FloatRange
 import android.support.annotation.IntRange
-import com.bingor.poptipwindow.view.tip.TipWindow
 import com.bingor.poptipwindow.impl.OnDataTimeDialogListener
 import com.bingor.poptipwindow.impl.OnWindowStateChangedListener
 import com.bingor.poptipwindow.view.picker.datetimepicker.DateTimePickerView

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bingor.poptipwindow.R;
 import com.bingor.poptipwindow.util.ShapeSelectorUtil;
@@ -16,11 +15,17 @@ import com.bingor.poptipwindow.util.ShapeSelectorUtil;
 import java.util.List;
 
 /**
+ * 简易的列表适配器
+ * {@link com.bingor.poptipwindow.builder.ListTipWindowBuilder#setAdapter(GeneralAdapter)}
  * Created by HXB on 2018/9/20.
  */
 public class SimpleListAdapter extends GeneralAdapter<String> {
+    //选中标签的颜色
     private int color;
-    private boolean needDelete, needTag;
+    //是否需要删除按钮
+    private boolean needDelete;
+    //是否需要选中标签
+    private boolean needTag;
 
     public SimpleListAdapter(Context context, List<String> datas, @ColorInt int color) {
         super(context, datas);
