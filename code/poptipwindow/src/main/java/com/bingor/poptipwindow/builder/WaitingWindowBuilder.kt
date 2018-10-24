@@ -9,6 +9,7 @@ import com.bingor.poptipwindow.view.LoadingView
 import com.bingor.poptipwindow.view.tip.Tip
 
 /**
+ * 等待提示窗构建器
  * Created by HXB on 2018/10/8.
  */
 class WaitingWindowBuilder : TipWindowBuilder<WaitingWindowBuilder> {

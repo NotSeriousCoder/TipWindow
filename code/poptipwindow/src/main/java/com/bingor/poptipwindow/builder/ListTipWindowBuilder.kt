@@ -5,6 +5,7 @@ import com.bingor.poptipwindow.adapter.GeneralAdapter
 import com.bingor.poptipwindow.impl.OnItemClickListener
 
 /**
+ * 列表提示窗构建器
  * Created by HXB on 2018/10/8.
  */
 class ListTipWindowBuilder(context: Context, tipType: Int) : TipWindowBuilder<ListTipWindowBuilder>(context, tipType) {

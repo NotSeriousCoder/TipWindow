@@ -10,6 +10,7 @@ import com.bingor.poptipwindow.view.picker.universalpicker.UniversalPickerView
 import com.bingor.poptipwindow.view.wheel.WheelItem
 
 /**
+ * 通用数据选择器提示窗构建器
  * Created by HXB on 2018/10/8.
  */
 class UniversalPickerWindowBuilder : TipWindowBuilder<UniversalPickerWindowBuilder> {

@@ -29,6 +29,7 @@ import com.bingor.poptipwindow.view.tip.CustomDialog;
 import com.bingor.poptipwindow.view.wheel.NumberWheelView;
 import com.bingor.poptipwindow.view.wheel.WheelItem;
 import com.bingor.poptipwindow.view.wheel.WheelView;
+import com.bingor.tipwindow.view.SoundVolume;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -43,61 +44,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.bt_list).setOnClickListener(new View.OnClickListener() {
+        customText();
+
+        findViewById(R.id.bt_custom_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (adapter == null) {
-                    List<String> data = new ArrayList<>();
-                    data.add("13710267845");
-                    data.add("15025515656");
-                    data.add("13325161561");
-                    data.add("18945851215");
-                    data.add("18154545455");
-                    data.add("16545145158");
-                    data.add("15454661456");
-                    data.add("18714545458");
-                    adapter = new SimpleListAdapter(MainActivity.this, data, Color.parseColor("#1a56f1"));
-                    adapter.setNeedDelete(false);
-                    adapter.setNeedTag(true);
-                }
-                new ListTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
-                        .setAdapter(adapter)
-                        .setCancelable(false)
-                        .setOnItemClickListener(new OnItemClickListener<String>() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id, String data) {
-                                Toast.makeText(getBaseContext(), data, Toast.LENGTH_SHORT).show();
-                            }
+                SoundVolume soundVolume = new SoundVolume();
+                soundVolume.setListener(new SoundVolume.OnEvent() {
+                    @Override
+                    public void onStartPressed() {
+                        Log.d("HXB", "onStartPressed");
+                    }
 
-                            @Override
-                            public void onItemDeleteClick(int position, String data) {
-                                Toast.makeText(getBaseContext(), "del==" + data, Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setAlpha(0.3f)
-                        .create()
-                        .show(findViewById(R.id.bt_list));
-            }
-        });
+                    @Override
+                    public void onStop(int timeSecond) {
+                        Log.d("HXB", "onStop");
 
-        NumTipView numTipView = findViewById(R.id.ntv_m_frg_mine_p_msg_num);
-        numTipView.setNum(15);
+                    }
 
+                    @Override
+                    public void onCancel() {
+                        Log.d("HXB", "onCancel");
 
-        findViewById(R.id.bt_custom).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextView tv = new TextView(MainActivity.this);
-                ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                tv.setLayoutParams(lp);
-                tv.setText("确定要删除这个文件吗？");
+                    }
+                });
                 new CustomTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
-                        .setOK("好的")
-                        .setCancel("不要")
-                        .setContentView(tv)
+                        .setContentView(soundVolume.getSoundVolumeView(MainActivity.this))
 //                        .setTextContent("确定要删除这个文件吗~~")
                         .setAlpha(0.3f)
-                        .setCancelable(false)
                         .setOnWindowStateChangedListener(new OnWindowStateChangedListener() {
                             @Override
                             public void onOKClicked() {
@@ -119,6 +93,54 @@ public class MainActivity extends AppCompatActivity {
 //                        .show(getWindow().getDecorView());
             }
         });
+
+        findViewById(R.id.bt_list).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (adapter == null) {
+                    List<String> data = new ArrayList<>();
+                    data.add("13710267845");
+                    data.add("15025515656");
+                    data.add("13325161561");
+                    data.add("18945851215");
+                    data.add("18154545455");
+                    data.add("16545145158");
+                    data.add("15454661456");
+                    data.add("18714545458");
+                    adapter = new SimpleListAdapter(MainActivity.this, data, Color.parseColor("#1a56f1"));
+                    //是否需要删除按钮
+                    adapter.setNeedDelete(false);
+                    //是否需要选中标签
+                    adapter.setNeedTag(true);
+                }
+
+                new ListTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
+                        .setAdapter(adapter)
+                        .setCancelable(false)
+                        .setOnItemClickListener(new OnItemClickListener<String>() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id, String data) {
+                                Toast.makeText(getBaseContext(), data, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onItemDeleteClick(int position, String data) {
+                                Toast.makeText(getBaseContext(), "del==" + data, Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        //设置空白处不透明度（0=完全透明 1=完全不透明）
+                        .setAlpha(0.3f)
+                        //设置是否能点击空白处取消（对返回键无效，待改进）
+                        .setCancelable(true)
+                        .create()
+                        .show(findViewById(R.id.bt_list));
+            }
+        });
+
+        NumTipView numTipView = findViewById(R.id.ntv_m_frg_mine_p_msg_num);
+        numTipView.setNum(15);
+
+
         findViewById(R.id.bt_date_time_picker).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -280,6 +302,39 @@ public class MainActivity extends AppCompatActivity {
                         .setMsg("读取中")
                         .create()
                         .show(findViewById(R.id.bt_data_picker));
+            }
+        });
+    }
+
+    private void customText() {
+        findViewById(R.id.bt_custom_text).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new CustomTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
+                        .setOK("好的")
+                        .setCancel("不要")
+                        .setTextContent("确定要删除这个文件吗~~")
+                        .setAlpha(0.3f)
+                        .setCancelable(false)
+                        .setOnWindowStateChangedListener(new OnWindowStateChangedListener() {
+                            @Override
+                            public void onOKClicked() {
+                                Toast.makeText(getBaseContext(), "好吧", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCancelClicked() {
+                                Toast.makeText(getBaseContext(), "取消", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onOutsideClicked() {
+                                Toast.makeText(getBaseContext(), "窗户消失", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .create()
+                        .show(findViewById(R.id.ll_main));
+//                        .show(getWindow().getDecorView());
             }
         });
     }

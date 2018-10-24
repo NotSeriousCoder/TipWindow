@@ -10,6 +10,7 @@ import com.bingor.poptipwindow.view.picker.datetimepicker.DateTimePickerView
 import com.bingor.poptipwindow.view.tip.Tip
 
 /**
+ * 日期选择题提示窗构建器
  * Created by HXB on 2018/10/8.
  */
 class DateTimePickerWindowBuilder : TipWindowBuilder<DateTimePickerWindowBuilder> {

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_m_view_sound_dialog_p_content"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@android:color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#7188a1">
+
+
+        <com.bingor.tipwindow.view.SoundVolumeView
+            android:id="@+id/svv_m_view_sound_dialog_p_volume"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="44dp"
+            app:heightMax="50dp" />
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/tv_m_view_sound_dialog_p_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="22dp"
+        android:text="按下说话"
+        android:textSize="17sp" />
+
+
+    <ImageView
+        android:id="@+id/iv_m_view_sound_dialog_p_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/ic_speak_sound_view" />
+
+    <TextView
+        android:id="@+id/tv_m_view_sound_dialog_p_copyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="语音功能核心技术由科大讯飞提供"
+        android:textColor="#cccccc"
+        android:textSize="11sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:singleLine="true"
+        android:text="                                                                                                                                                                                                            " />
+
+</LinearLayout>

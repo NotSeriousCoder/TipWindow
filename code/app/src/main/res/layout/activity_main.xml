@@ -9,16 +9,23 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/bt_custom_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CustomTipWindow--by text" />
+
+    <Button
+        android:id="@+id/bt_custom_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CustomTipWindow--by contentView" />
+
+    <Button
         android:id="@+id/bt_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="列表模式" />
 
-    <Button
-        android:id="@+id/bt_custom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="自定义内容模式" />
 
     <Button
         android:id="@+id/bt_data_picker"

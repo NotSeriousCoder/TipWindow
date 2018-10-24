@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 圆形数字控件 -->
+    <declare-styleable name="SoundVolumeView">
+        <!-- 最大/小高度 -->
+        <attr name="heightMax" format="dimension" />
+        <attr name="heightMin" format="dimension" />
+        <!-- 柱子颜色 -->
+        <attr name="colorSound" format="color" />
+        <!-- 最大/小透明度 -->
+        <attr name="alphaMax" format="float" />
+        <attr name="alphaMin" format="float" />
+        <!-- 柱子数量 -->
+        <attr name="numLattice" format="integer" />
+        <!-- 柱子间距 -->
+        <attr name="spacingHor" format="dimension" />
+        <!-- 时间字体大小 -->
+        <attr name="timeSize" format="dimension" />
+        <!-- 柱子宽度 -->
+        <attr name="latticeWidth" format="dimension" />
+    </declare-styleable>
+</resources>
