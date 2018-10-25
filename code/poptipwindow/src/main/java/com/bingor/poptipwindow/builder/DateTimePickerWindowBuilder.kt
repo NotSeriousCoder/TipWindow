@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.annotation.ColorInt
 import android.support.annotation.FloatRange
 import android.support.annotation.IntRange
+import android.view.View
 import com.bingor.poptipwindow.impl.OnDataTimeDialogListener
 import com.bingor.poptipwindow.impl.OnWindowStateChangedListener
 import com.bingor.poptipwindow.view.picker.datetimepicker.DateTimePickerView
@@ -57,6 +58,9 @@ class DateTimePickerWindowBuilder : TipWindowBuilder<DateTimePickerWindowBuilder
         return this
     }
 
+    /**
+     * 滚轮竖向间距
+     */
     fun setLineSpaceMultiplier(@IntRange(from = 2, to = 4) lineSpaceMultiplier: Int): DateTimePickerWindowBuilder {
         (tip.contentView as DateTimePickerView).setLineSpaceMultiplier(lineSpaceMultiplier)
         return this
@@ -127,10 +131,10 @@ class DateTimePickerWindowBuilder : TipWindowBuilder<DateTimePickerWindowBuilder
         return this
     }
 
-    fun setTabIndicatorColor(tabIndicatorColor: Int): DateTimePickerWindowBuilder {
-        (tip.contentView as DateTimePickerView).setTabIndicatorColor(tabIndicatorColor)
-        return this
-    }
+//    fun setTabIndicatorColor(tabIndicatorColor: Int): DateTimePickerWindowBuilder {
+//        (tip.contentView as DateTimePickerView).setTabIndicatorColor(tabIndicatorColor)
+//        return this
+//    }
 
     fun setType(type: Int): DateTimePickerWindowBuilder {
         (tip.contentView as DateTimePickerView).setType(type)

@@ -58,13 +58,6 @@ public class SoundVolumeView extends SurfaceView implements SurfaceHolder.Callba
         initView(context, attrs);
     }
 
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-
-
-    }
-
     private void initView(Context context, AttributeSet attrs) {
         holder = getHolder();
         holder.addCallback(this); //设置Surface生命周期回调
@@ -186,7 +179,7 @@ public class SoundVolumeView extends SurfaceView implements SurfaceHolder.Callba
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.d("HXB", "surfaceCreated(SurfaceHolder holder)");
+//        Log.d("HXB", "surfaceCreated(SurfaceHolder holder)");
         new DrawPrimaryThread().start();
     }
 
@@ -209,7 +202,7 @@ public class SoundVolumeView extends SurfaceView implements SurfaceHolder.Callba
                 e.printStackTrace();
             }
             while (run) {
-                Canvas canvas = holder.lockCanvas(new Rect(0, 0, 300,getWindowManager().getDefaultDisplay().getHeight()));
+                Canvas canvas = holder.lockCanvas();
                 doDraw(canvas);
                 try {
                     Thread.sleep(50);
@@ -282,7 +275,7 @@ public class SoundVolumeView extends SurfaceView implements SurfaceHolder.Callba
 
 
     private void doDraw(Canvas canvas) {
-        Log.d("HXB", "doDraw(Canvas canvas)---" + (canvas == null));
+//        Log.d("HXB", "doDraw(Canvas canvas)---" + (canvas == null));
         if (canvas == null) {
             return;
         }

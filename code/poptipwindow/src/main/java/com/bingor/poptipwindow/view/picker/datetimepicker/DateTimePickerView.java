@@ -43,14 +43,14 @@ public class DateTimePickerView extends Picker {
     private NumberWheelView npYear, npMonth, npDay, npHour, npMinute;
     private List<View> pagesList;
     private DateTimePageAdapter adapter;
-    //下划线颜色
-    private int tabIndicatorColor;
+//    //下划线颜色
+//    private int tabIndicatorColor;
     private int type = TYPE_NORMAL;
 
 
     public DateTimePickerView(Context context) {
         super(context, null);
-        tabIndicatorColor = getResources().getColor(R.color.main_color);
+//        tabIndicatorColor = getResources().getColor(R.color.main_color);
         initView();
         initData();
         initListener();
@@ -63,7 +63,7 @@ public class DateTimePickerView extends Picker {
     public DateTimePickerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray ta = context.obtainStyledAttributes(attrs, android.support.design.R.styleable.TabLayout);
-        tabIndicatorColor = ta.getColor(android.support.design.R.styleable.TabLayout_tabIndicatorColor, getResources().getColor(R.color.main_color));
+//        tabIndicatorColor = ta.getColor(android.support.design.R.styleable.TabLayout_tabIndicatorColor, getResources().getColor(R.color.main_color));
         ta.recycle();
 
         initView();
@@ -252,7 +252,7 @@ public class DateTimePickerView extends Picker {
     }
 
     public void init() {
-        tab.setSelectedTabIndicatorColor(tabIndicatorColor);
+        tab.setSelectedTabIndicatorColor(dividerColor);
         tab.setTabTextColors(textColorNormal, textColorFocus);
         initWheelView(npYear);
         initWheelView(npMonth);
@@ -402,10 +402,10 @@ public class DateTimePickerView extends Picker {
         return this;
     }
 
-    public DateTimePickerView setTabIndicatorColor(int tabIndicatorColor) {
-        this.tabIndicatorColor = tabIndicatorColor;
-        return this;
-    }
+//    public DateTimePickerView setTabIndicatorColor(int tabIndicatorColor) {
+//        this.tabIndicatorColor = tabIndicatorColor;
+//        return this;
+//    }
 
     @Override
     public DateTimePickerView setTextSize(int textSizePX) {

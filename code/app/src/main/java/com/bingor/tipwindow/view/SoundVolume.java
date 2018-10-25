@@ -26,7 +26,6 @@ public class SoundVolume {
     public View getSoundVolumeView(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.view_sound_dialog, null);
         init(view);
-
         return view;
     }
 

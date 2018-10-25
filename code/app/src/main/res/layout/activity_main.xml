@@ -1,149 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ll_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/bt_custom_text"
+    <LinearLayout
+        android:id="@+id/ll_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CustomTipWindow--by text" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/bt_custom_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CustomTipWindow--by contentView" />
+        <Button
+            android:id="@+id/bt_custom_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CustomTipWindow--使用默认布局"
+            android:textAllCaps="false" />
 
-    <Button
-        android:id="@+id/bt_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="列表模式" />
+        <Button
+            android:id="@+id/bt_custom_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CustomTipWindow--使用自定义布局"
+            android:textAllCaps="false" />
 
-
-    <Button
-        android:id="@+id/bt_data_picker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="联动滚轮窗口" />
-
-    <Button
-        android:id="@+id/bt_date_time_picker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="时间窗口" />
-
-    <Button
-        android:id="@+id/bt_waiting"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="读取中" />
-
-    <com.bingor.numbertipview.NumTipView
-        android:id="@+id/ntv_m_frg_mine_p_msg_num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#112233"
-        app:hor_padding="15dp"
-        app:max_num="99"
-        app:min_gone="false"
-        app:min_num="0"
-        app:text_color="#ffff13"
-        app:text_size="10sp"
-        app:ver_padding="15dp" />
-
-    <!--<com.bingor.poptipwindow.view.picker.datetimepicker.DateTimePickerView-->
-    <!--android:id="@+id/upv_test"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--app:cycleable="true"-->
-    <!--app:dividerWidthRatio="0.8"-->
-    <!--app:lineSpaceMultiplier="2"-->
-    <!--app:textSize="16sp"-->
-    <!--app:visibleItemCount="5" />-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="horizontal">-->
+        <Button
+            android:id="@+id/bt_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ListTipWindow--列表模式"
+            android:textAllCaps="false" />
 
 
-    <!--<com.bingor.poptipwindow.view.wheel.NumberWheelView-->
-    <!--android:id="@+id/wv_test1"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--app:cycleable="true"-->
-    <!--app:dividerColor="#551900"-->
-    <!--app:dividerWidthRatio="0.8"-->
-    <!--app:lineSpaceMultiplier="2"-->
-    <!--app:textColorFocus="#1155dd"-->
-    <!--app:textColorNormal="#a3dd12"-->
-    <!--app:textSize="16sp"-->
-    <!--app:visibleItemCount="5" />-->
+        <Button
+            android:id="@+id/bt_data_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="UniversalPickerWindow-联动滚轮"
+            android:textAllCaps="false" />
 
+        <Button
+            android:id="@+id/bt_date_time_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DateTimePickerWindow--时间选择器"
+            android:textAllCaps="false" />
 
-    <!--<com.bingor.poptipwindow.view.wheel.NumberWheelView-->
-    <!--android:id="@+id/wv_test2"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--app:cycleable="true"-->
-    <!--app:dividerColor="#551900"-->
-    <!--app:dividerWidthRatio="0.8"-->
-    <!--app:lineSpaceMultiplier="2"-->
-    <!--app:textColorFocus="#1155dd"-->
-    <!--app:textColorNormal="#a3dd12"-->
-    <!--app:textSize="16sp"-->
-    <!--app:visibleItemCount="5" />-->
+        <Button
+            android:id="@+id/bt_waiting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="WaitingWindow--等待窗口"
+            android:textAllCaps="false" />
 
-
-    <!--<com.bingor.poptipwindow.view.wheel.NumberWheelView-->
-    <!--android:id="@+id/wv_test3"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--app:cycleable="true"-->
-    <!--app:dividerColor="#551900"-->
-    <!--app:dividerWidthRatio="0.8"-->
-    <!--app:lineSpaceMultiplier="2"-->
-    <!--app:textColorFocus="#1155dd"-->
-    <!--app:textColorNormal="#a3dd12"-->
-    <!--app:textSize="16sp"-->
-    <!--app:visibleItemCount="5" />-->
-
-
-    <!--<com.bingor.poptipwindow.view.wheel.NumberWheelView-->
-    <!--android:id="@+id/wv_test4"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--app:cycleable="true"-->
-    <!--app:dividerColor="#551900"-->
-    <!--app:dividerWidthRatio="0.8"-->
-    <!--app:lineSpaceMultiplier="2"-->
-    <!--app:textColorFocus="#1155dd"-->
-    <!--app:textColorNormal="#a3dd12"-->
-    <!--app:textSize="16sp"-->
-    <!--app:visibleItemCount="5" />-->
-
-
-    <!--<com.bingor.poptipwindow.view.wheel.NumberWheelView-->
-    <!--android:id="@+id/wv_test5"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--app:cycleable="true"-->
-    <!--app:dividerColor="#551900"-->
-    <!--app:dividerWidthRatio="0.8"-->
-    <!--app:lineSpaceMultiplier="2"-->
-    <!--app:textColorFocus="#1155dd"-->
-    <!--app:textColorNormal="#a3dd12"-->
-    <!--app:textSize="16sp"-->
-    <!--app:visibleItemCount="5" />-->
-
-    <!--</LinearLayout>-->
-
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

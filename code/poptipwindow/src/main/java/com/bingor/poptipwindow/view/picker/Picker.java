@@ -76,6 +76,11 @@ public abstract class Picker extends LinearLayout {
         return lineSpaceMultiplier;
     }
 
+    /**
+     * 滚轮竖向间距
+     * @param lineSpaceMultiplier
+     * @return
+     */
     public Picker setLineSpaceMultiplier(@IntRange(from = 2, to = 4) int lineSpaceMultiplier) {
         this.lineSpaceMultiplier = lineSpaceMultiplier;
         return this;

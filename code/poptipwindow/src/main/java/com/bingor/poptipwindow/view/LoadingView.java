@@ -73,4 +73,8 @@ public class LoadingView extends FrameLayout {
     public void setImageBitmap(Bitmap bitmap) {
         ivLoading.setImageBitmap(bitmap);
     }
+
+    public void setTextSize(int textSizePX) {
+        tvMsg.setTextSize(textSizePX);
+    }
 }

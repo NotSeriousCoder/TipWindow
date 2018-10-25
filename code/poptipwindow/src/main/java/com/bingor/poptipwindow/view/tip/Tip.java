@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bingor.poptipwindow.R;
 import com.bingor.poptipwindow.adapter.GeneralAdapter;
@@ -235,13 +236,6 @@ public abstract class Tip {
             LinearLayout linearLayout = (LinearLayout) rootView;
             linearLayout.setGravity(Gravity.CENTER);
         }
-
-        parent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
     public void show(View anchor) {

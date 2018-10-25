@@ -45,8 +45,27 @@ public class UnitConverter {
         }
     }
 
-    public static float applyDimension(Context context, int unit, float size) {
-        Resources r = context.getResources();
-        return TypedValue.applyDimension(unit, size, r.getDisplayMetrics());
+    /**
+     * 将sp值转换为px值，保证文字大小不变
+     *
+     * @param spValue
+     * @return
+     */
+    public static int sp2px(Context context, float spValue) {
+        final float fontScale = getDisplayMetrics(context).scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
     }
+
+    /**
+     * 将px值转换为sp值，保证文字大小不变
+     *
+     * @param pxValue
+     * @return
+     */
+
+    public static int px2sp(Context context, float pxValue) {
+        final float fontScale = getDisplayMetrics(context).scaledDensity;
+        return (int) (pxValue / fontScale + 0.5f);
+    }
+
 }

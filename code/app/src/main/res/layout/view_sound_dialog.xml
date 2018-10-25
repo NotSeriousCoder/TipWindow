@@ -11,20 +11,11 @@
     android:orientation="vertical">
 
 
-    <FrameLayout
+    <com.bingor.tipwindow.view.SoundVolumeView
+        android:id="@+id/svv_m_view_sound_dialog_p_volume"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#7188a1">
-
-
-        <com.bingor.tipwindow.view.SoundVolumeView
-            android:id="@+id/svv_m_view_sound_dialog_p_volume"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="44dp"
-            app:heightMax="50dp" />
-    </FrameLayout>
-
+        app:heightMax="50dp" />
 
     <TextView
         android:id="@+id/tv_m_view_sound_dialog_p_tip"
@@ -48,10 +39,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="语音功能核心技术由科大讯飞提供"
         android:textColor="#cccccc"
         android:textSize="11sp" />
 
+    <!--android:text="语音功能核心技术由科大讯飞提供"-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="1dp"

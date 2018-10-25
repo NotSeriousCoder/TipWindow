@@ -5,10 +5,12 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ import com.bingor.poptipwindow.impl.OnDataSelectedListener;
 import com.bingor.poptipwindow.impl.OnDataTimeDialogListener;
 import com.bingor.poptipwindow.impl.OnItemClickListener;
 import com.bingor.poptipwindow.impl.OnWindowStateChangedListener;
+import com.bingor.poptipwindow.util.UnitConverter;
 import com.bingor.poptipwindow.view.picker.datetimepicker.DateTimePickerView;
 import com.bingor.poptipwindow.view.tip.CustomDialog;
 import com.bingor.poptipwindow.view.wheel.NumberWheelView;
@@ -45,7 +48,48 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         customText();
+        customView();
+        dateTimePicker();
+        list();
+        dataPicker();
+        waiting();
+    }
 
+
+    private void customText() {
+        findViewById(R.id.bt_custom_text).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new CustomTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
+                        .setOK("好的")
+                        .setCancel("不要")
+                        .setTextContent("确定要删除这个文件吗~~")
+                        .setAlpha(0.3f)
+                        .setCancelable(false)
+                        .setOnWindowStateChangedListener(new OnWindowStateChangedListener() {
+                            @Override
+                            public void onOKClicked() {
+                                Toast.makeText(getBaseContext(), "好吧", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCancelClicked() {
+                                Toast.makeText(getBaseContext(), "取消", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onOutsideClicked() {
+                                Toast.makeText(getBaseContext(), "窗户消失", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .create()
+                        .show(findViewById(R.id.ll_main));
+//                        .show(getWindow().getDecorView());
+            }
+        });
+    }
+
+    private void customView() {
         findViewById(R.id.bt_custom_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-                new CustomTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
+                new CustomTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_DIALOG)
                         .setContentView(soundVolume.getSoundVolumeView(MainActivity.this))
 //                        .setTextContent("确定要删除这个文件吗~~")
                         .setAlpha(0.3f)
@@ -93,59 +137,20 @@ public class MainActivity extends AppCompatActivity {
 //                        .show(getWindow().getDecorView());
             }
         });
+    }
 
-        findViewById(R.id.bt_list).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (adapter == null) {
-                    List<String> data = new ArrayList<>();
-                    data.add("13710267845");
-                    data.add("15025515656");
-                    data.add("13325161561");
-                    data.add("18945851215");
-                    data.add("18154545455");
-                    data.add("16545145158");
-                    data.add("15454661456");
-                    data.add("18714545458");
-                    adapter = new SimpleListAdapter(MainActivity.this, data, Color.parseColor("#1a56f1"));
-                    //是否需要删除按钮
-                    adapter.setNeedDelete(false);
-                    //是否需要选中标签
-                    adapter.setNeedTag(true);
-                }
-
-                new ListTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
-                        .setAdapter(adapter)
-                        .setCancelable(false)
-                        .setOnItemClickListener(new OnItemClickListener<String>() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id, String data) {
-                                Toast.makeText(getBaseContext(), data, Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onItemDeleteClick(int position, String data) {
-                                Toast.makeText(getBaseContext(), "del==" + data, Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        //设置空白处不透明度（0=完全透明 1=完全不透明）
-                        .setAlpha(0.3f)
-                        //设置是否能点击空白处取消（对返回键无效，待改进）
-                        .setCancelable(true)
-                        .create()
-                        .show(findViewById(R.id.bt_list));
-            }
-        });
-
-        NumTipView numTipView = findViewById(R.id.ntv_m_frg_mine_p_msg_num);
-        numTipView.setNum(15);
-
-
+    private void dateTimePicker() {
         findViewById(R.id.bt_date_time_picker).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DateTimePickerWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
+                        //设置空白处不透明度（0=完全透明 1=完全不透明）
+                        .setAlpha(0.2f)
+                        //设置是否能点击空白处取消（TIP_TYPE_WINDOW模式下对返回键无效，待改进）
+                        .setCancelable(false)
                         .setOK("选定")
+                        .setCancel("取消")
+                        //日期选择器回调
                         .setOnDataTimeDialogListener(new OnDataTimeDialogListener() {
                             @Override
                             public void onOKClicked(@NotNull String dateTimeFormat, long dateTime) {
@@ -162,28 +167,28 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                         })
+                        //滚轮竖向间距（2-4），不设置默认为2，数字越大，间距越大
+                        .setLineSpaceMultiplier(2)
+                        //设置字号（px），默认14sp
+                        .setTextSize(UnitConverter.sp2px(getBaseContext(), 18))
+                        //滚轮正常文字的颜色（同时也是顶部Tab的非选中文字颜色）
+                        .setTextColorNormal(getResources().getColor(R.color.colorAccent))
+                        //滚轮聚焦文字的颜色（同时也是顶部Tab的选中文字颜色）
+                        .setTextColorFocus(Color.parseColor("#0069E6"))
+                        //设置滚轮分割线颜色（同时也是顶部Tab的选中颜色）
+                        .setDividerColor(Color.parseColor("#1E802A"))
+                        //设置滚轮分割线宽度比例
+                        .setDividerWidthRatio(0.7f)
+                        //设置滚轮可见项数量
+                        .setVisibleItemCount(7)
+                        //设置是否可以循环滚动，默认可以
+                        .setCycleable(true)
                         //起始时间，不设置默认1-1-1 0:0
                         .setDateTimeStart(1995, 3, 20, 0, 0)
                         //终止时间，不设置默认9999-12-31 23:59
                         .setDateTimeEnd(2222, 8, 8, 23, 59)
                         //默认显示时间，不设置默认当前时间
                         .setDateTimeInit(2018, 10, 22, 10, 29)
-                        .setOK("好的")
-                        .setCancel("取消")
-                        //设置是否能点击空白处取消（对返回键无效，待改进）
-                        .setCancelable(false)
-                        //设置滚轮分割线颜色（同时也是顶部Tab的选中颜色）
-                        .setDividerColor(Color.parseColor("#1069C2"))
-                        //滚轮聚焦文字的颜色（同时也是顶部Tab的选中文字颜色）
-                        .setTextColorFocus(Color.parseColor("#F10606"))
-                        //滚轮正常文字的颜色（同时也是顶部Tab的非选中文字颜色）
-                        .setTextColorNormal(getResources().getColor(R.color.colorAccent))
-                        //设置空白处不透明度（0=完全透明 1=完全不透明）
-                        .setAlpha(0.2f)
-                        //设置滚轮可见项数量
-                        .setVisibleItemCount(7)
-                        //设置滚轮分割线宽度比例
-                        .setDividerWidthRatio(0.7f)
                         //设置显示模式（日期-时间/仅日期/仅时间）
                         /**
                          * {@link DateTimePickerView#TYPE_NORMAL}
@@ -196,7 +201,54 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    private void list() {
+        findViewById(R.id.bt_list).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (adapter == null) {
+                    List<String> data = new ArrayList<>();
+                    data.add("13710267845");
+                    data.add("15025515656");
+                    data.add("13325161561");
+                    data.add("18945851215");
+                    data.add("18154545455");
+                    data.add("16545145158");
+                    data.add("15454661456");
+                    data.add("18714545458");
+                    adapter = new SimpleListAdapter(MainActivity.this, data, Color.parseColor("#1a56f1"));
+                    //是否需要删除按钮
+                    adapter.setNeedDelete(true);
+                    //是否需要选中标签
+                    adapter.setNeedTag(true);
+                }
+
+                new ListTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
+                        //设置空白处不透明度（0=完全透明 1=完全不透明）
+                        .setAlpha(0.3f)
+                        //设置是否能点击空白处取消（对返回键无效，待改进）
+                        .setCancelable(true)
+                        //列表适配器
+                        .setAdapter(adapter)
+                        .setOnItemClickListener(new OnItemClickListener<String>() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id, String data) {
+                                Toast.makeText(getBaseContext(), data, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onItemDeleteClick(int position, String data) {
+                                Toast.makeText(getBaseContext(), "del==" + data, Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .create()
+                        .show(findViewById(R.id.bt_list));
+            }
+        });
+    }
+
+    private void dataPicker() {
         findViewById(R.id.bt_data_picker).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -265,7 +317,12 @@ public class MainActivity extends AppCompatActivity {
                 d_1.add(tb_1c);
 
                 new UniversalPickerWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
+                        //设置空白处不透明度（0=完全透明 1=完全不透明）
+                        .setAlpha(0.2f)
+                        //设置是否能点击空白处取消（TIP_TYPE_WINDOW模式下对返回键无效，待改进）
+                        .setCancelable(false)
                         .setOK("选定")
+                        .setCancel("取消")
                         .setOnDataSelectedListener(new OnDataSelectedListener() {
                             @Override
                             public void onOKClicked(@NotNull List<? extends WheelItem> items, @NotNull int[] positions) {
@@ -288,55 +345,49 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                         })
+                        //滚轮竖向间距（2-4），不设置默认为2，数字越大，间距越大
+                        .setLineSpaceMultiplier(2)
+                        //设置字号（px），默认14sp
+                        .setTextSize(UnitConverter.sp2px(getBaseContext(), 18))
+                        //滚轮正常文字的颜色（同时也是顶部Tab的非选中文字颜色）
+                        .setTextColorNormal(getResources().getColor(R.color.colorAccent))
+                        //滚轮聚焦文字的颜色（同时也是顶部Tab的选中文字颜色）
+                        .setTextColorFocus(Color.parseColor("#0069E6"))
+                        //设置滚轮分割线颜色（同时也是顶部Tab的选中颜色）
+                        .setDividerColor(Color.parseColor("#1E802A"))
+                        //设置滚轮分割线宽度比例
+                        .setDividerWidthRatio(0.7f)
+                        //设置滚轮可见项数量
+                        .setVisibleItemCount(7)
+                        //设置是否可以循环滚动，默认可以
+                        .setCycleable(true)
+                        //设置数据
                         .setDatas(d_1)
                         .create()
                         .show(findViewById(R.id.bt_data_picker));
             }
         });
+    }
 
+    private void waiting() {
         findViewById(R.id.bt_waiting).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 new WaitingWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
+                        //设置空白处不透明度（0=完全透明 1=完全不透明）
+                        .setAlpha(0.2f)
+                        //设置是否能点击空白处取消（TIP_TYPE_WINDOW模式下对返回键无效，待改进）
+                        .setCancelable(false)
+                        //提示语
                         .setMsg("读取中")
+                        //设置字号（px），默认16sp
+                        .setTextSize(UnitConverter.sp2px(getBaseContext(), 18))
+                        //动画的图标
+                        .setImageResource(R.drawable.ic_test)
                         .create()
                         .show(findViewById(R.id.bt_data_picker));
             }
         });
     }
-
-    private void customText() {
-        findViewById(R.id.bt_custom_text).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new CustomTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
-                        .setOK("好的")
-                        .setCancel("不要")
-                        .setTextContent("确定要删除这个文件吗~~")
-                        .setAlpha(0.3f)
-                        .setCancelable(false)
-                        .setOnWindowStateChangedListener(new OnWindowStateChangedListener() {
-                            @Override
-                            public void onOKClicked() {
-                                Toast.makeText(getBaseContext(), "好吧", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onCancelClicked() {
-                                Toast.makeText(getBaseContext(), "取消", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onOutsideClicked() {
-                                Toast.makeText(getBaseContext(), "窗户消失", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .create()
-                        .show(findViewById(R.id.ll_main));
-//                        .show(getWindow().getDecorView());
-            }
-        });
-    }
-
 }

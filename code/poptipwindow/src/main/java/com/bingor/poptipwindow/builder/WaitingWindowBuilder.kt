@@ -48,6 +48,11 @@ class WaitingWindowBuilder : TipWindowBuilder<WaitingWindowBuilder> {
         return this
     }
 
+    fun setTextSize(textSizePX: Int): WaitingWindowBuilder {
+        (tip.contentView as LoadingView).setTextSize(textSizePX)
+        return this
+    }
+
     override fun create(): Tip {
         tip.setWrapContent(true)
         tip.setContentCenter(true)
