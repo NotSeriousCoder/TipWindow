@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
                         })
                         .create()
                         .show(findViewById(R.id.ll_main));
-//                        .show(getWindow().getDecorView());
             }
         });
     }
