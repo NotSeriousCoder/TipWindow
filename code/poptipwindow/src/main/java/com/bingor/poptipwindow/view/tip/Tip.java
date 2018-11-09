@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +51,7 @@ public abstract class Tip {
 
     //自定义模式
     protected LinearLayout contentParent;
-    protected View contentView, okCancelPadding;
+    protected View contentView;
     protected TextView tvContent;
     protected TextView tvOK, tvCancel;
     protected String textOK, textCancel, textContent;
@@ -89,11 +90,10 @@ public abstract class Tip {
         if (contentView != null || !TextUtils.isEmpty(textContent)) {
             rootView = LayoutInflater.from(context).inflate(R.layout.view_tip_ok_cancel, null, false);
             tvContent = rootView.findViewById(R.id.tv_m_view_tip_ok_cancel_p_content);
-            parent = rootView.findViewById(R.id.ll_m_view_tip_ok_cancel_p_parent);
+            parent = rootView.findViewById(R.id.rl_m_view_tip_ok_cancel_p_parent);
             contentParent = rootView.findViewById(R.id.ll_m_view_tip_ok_cancel_p_content);
             tvOK = rootView.findViewById(R.id.tv_m_view_tip_ok_cancel_p_ok);
             tvCancel = rootView.findViewById(R.id.tv_m_view_tip_ok_cancel_p_cancel);
-            okCancelPadding = rootView.findViewById(R.id.view_m_view_tip_ok_cancel_p_ok_cancel_padding);
 
             /**
              * 某些情况下不需要顶部有padding，即可通过contentNeedPaddingTop = false来设置
@@ -180,21 +180,33 @@ public abstract class Tip {
      * 初始化自定义模式下的数据
      */
     protected void initContent() {
-        if (!TextUtils.isEmpty(textOK)) {
-            tvOK.setText(textOK);
-        }
-        if (!TextUtils.isEmpty(textCancel)) {
-            tvCancel.setText(textCancel);
-        }
+        tvOK.setText(textOK);
+        tvCancel.setText(textCancel);
 
         if (TextUtils.isEmpty(textOK)) {
             tvOK.setVisibility(View.GONE);
-            okCancelPadding.setVisibility(View.GONE);
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) tvCancel.getLayoutParams();
+            lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            tvCancel.setLayoutParams(lp);
         }
         if (TextUtils.isEmpty(textCancel)) {
             tvCancel.setVisibility(View.GONE);
-            okCancelPadding.setVisibility(View.GONE);
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) tvOK.getLayoutParams();
+            lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            tvOK.setLayoutParams(lp);
         }
+
+        /**
+         * wrapContent决定整个提示框的窗体是否包裹内容
+         * {@link Tip#setWrapContent(boolean)}
+         */
+        ViewGroup.LayoutParams lp = contentParent.getLayoutParams();
+        if (wrapContent) {
+            lp.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+        } else {
+            lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        }
+        contentParent.setLayoutParams(lp);
 
         tvOK.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,16 +232,6 @@ public abstract class Tip {
             tvContent.setText(textContent);
         } else {
             contentParent.addView(contentView);
-        }
-
-        /**
-         * wrapContent决定整个提示框的窗体是否包裹内容
-         * {@link Tip#setWrapContent(boolean)}
-         */
-        if (!wrapContent) {
-            okCancelPadding.setVisibility(View.VISIBLE);
-        } else {
-            okCancelPadding.setVisibility(View.GONE);
         }
 
         if (center) {

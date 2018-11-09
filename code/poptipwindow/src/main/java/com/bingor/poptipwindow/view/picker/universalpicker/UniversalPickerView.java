@@ -114,7 +114,7 @@ public class UniversalPickerView extends Picker {
                 } else {
                     children = null;
                 }
-                if (children != null) {
+                if (children != null && !children.isEmpty()) {
                     UniversalWheelView nextABCUniversalPickerView;
                     if (getChildCount() > group + 1) {
                         nextABCUniversalPickerView = (UniversalWheelView) getChildAt(group + 1);

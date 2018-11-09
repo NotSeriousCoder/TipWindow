@@ -48,6 +48,11 @@ abstract class TipWindowBuilder<T> {
         return this as T
     }
 
+    open fun setWrapContent(wrapContent: Boolean): T {
+        tip.setWrapContent(wrapContent)
+        return this as T
+    }
+
     /**
      * 设置点击空白处能不能关闭提示窗
      */

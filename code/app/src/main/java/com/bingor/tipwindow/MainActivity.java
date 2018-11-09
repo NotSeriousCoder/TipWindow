@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 new CustomTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
                         .setOK("好的")
                         .setCancel("不要")
+                        .setWrapContent(true)
                         .setTextContent("确定要删除这个文件吗~~")
                         .setAlpha(0.3f)
                         .setCancelable(false)
@@ -321,7 +322,6 @@ public class MainActivity extends AppCompatActivity {
                         //设置是否能点击空白处取消（TIP_TYPE_WINDOW模式下对返回键无效，待改进）
                         .setCancelable(false)
                         .setOK("选定")
-                        .setCancel("取消")
                         .setOnDataSelectedListener(new OnDataSelectedListener() {
                             @Override
                             public void onOKClicked(@NotNull List<? extends WheelItem> items, @NotNull int[] positions) {
