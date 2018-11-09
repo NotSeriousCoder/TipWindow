@@ -11,7 +11,7 @@
   
 ### 2.在你要用这个控件的模块gradle文件
 	implementation 'com.github.NotSeriousCoder:TipWindow:{lastversion}'
-	lastversion目前是1.1.4
+	lastversion请自行查看releases
 
 ## 简单使用方法，详细的使用方法请看Demo
 ### 1.列表模式
