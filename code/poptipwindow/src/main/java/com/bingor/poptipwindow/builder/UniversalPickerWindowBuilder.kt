@@ -7,6 +7,7 @@ import android.support.annotation.IntRange
 import com.bingor.poptipwindow.impl.OnDataSelectedListener
 import com.bingor.poptipwindow.impl.OnWindowStateChangedListener
 import com.bingor.poptipwindow.view.picker.universalpicker.UniversalPickerView
+import com.bingor.poptipwindow.view.tip.Tip
 import com.bingor.poptipwindow.view.wheel.WheelItem
 
 /**
@@ -87,9 +88,13 @@ class UniversalPickerWindowBuilder : TipWindowBuilder<UniversalPickerWindowBuild
         return this
     }
 
-
     fun setDatas(datas: List<WheelItem>): UniversalPickerWindowBuilder {
         (tip.contentView as UniversalPickerView).setDatas(datas)
         return this
+    }
+
+    override fun create(): Tip {
+        (tip.contentView as UniversalPickerView).initWheel()
+        return super.create()
     }
 }

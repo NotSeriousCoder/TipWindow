@@ -60,13 +60,23 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_custom_text).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new CustomTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
+
+                //这里有TipWindowBuilder.TIP_TYPE_WINDOW和TipWindowBuilder.TIP_TYPE_DIALOG两种模式
+                //分别用PopupWindow和Dialog实现窗口
+                new CustomTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_DIALOG)
+                        //不设置就没有确定按钮
                         .setOK("好的")
+                        //不设置就没有取消按钮
                         .setCancel("不要")
-                        .setWrapContent(true)
+                        //窗口是否包裹内容
+                        .setWrapContent(false)
+                        //文字内容
                         .setTextContent("确定要删除这个文件吗~~")
-                        .setAlpha(0.3f)
+                        //空白处不透明度1=全黑 0=透明
+                        .setAlpha(1f)
+                        //是否能点击空白处/返回键关闭窗口（WINDOW模式下，无法拦截返回键QAQ）
                         .setCancelable(false)
+                        //回调
                         .setOnWindowStateChangedListener(new OnWindowStateChangedListener() {
                             @Override
                             public void onOKClicked() {
@@ -84,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         })
                         .create()
+                        //DIALOG模式下，传null就行，WINDOW模式下，传界面里面的任意一个View就好
                         .show(findViewById(R.id.ll_main));
             }
         });

@@ -141,7 +141,7 @@ public class UniversalPickerView extends Picker {
         return wheelView;
     }
 
-    protected void initWheel() {
+    public void initWheel() {
         UniversalWheelView wheelView = createWheelView();
         if (!cycleable || datas.size() < 4) {
             wheelView.setCycleable(false);
@@ -157,7 +157,6 @@ public class UniversalPickerView extends Picker {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     public void setDatas(final List<? extends WheelItem> datas) {
         this.datas = datas;
-        initWheel();
     }
 
     public List<? extends WheelItem> getCurrentItems() {
