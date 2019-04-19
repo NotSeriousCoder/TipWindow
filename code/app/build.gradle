@@ -30,4 +30,6 @@ dependencies {
     implementation project(path: ':poptipwindow')
     implementation 'com.github.NotSeriousCoder:NumberTipView:1.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+//    implementation 'com.github.NotSeriousCoder:TipWindow:1.2.0'
+
 }

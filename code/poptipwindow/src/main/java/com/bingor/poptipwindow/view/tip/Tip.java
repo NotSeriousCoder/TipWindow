@@ -279,7 +279,7 @@ public abstract class Tip {
         if (onTipBoxStateChangedListener != null) {
             onTipBoxStateChangedListener.onTipBoxDismissed();
         }
-        context = null;
+//        context = null;
     }
 
     /**

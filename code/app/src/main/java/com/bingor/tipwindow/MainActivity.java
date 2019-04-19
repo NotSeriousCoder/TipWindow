@@ -29,6 +29,7 @@ import com.bingor.poptipwindow.impl.OnWindowStateChangedListener;
 import com.bingor.poptipwindow.util.UnitConverter;
 import com.bingor.poptipwindow.view.picker.datetimepicker.DateTimePickerView;
 import com.bingor.poptipwindow.view.tip.CustomDialog;
+import com.bingor.poptipwindow.view.tip.Tip;
 import com.bingor.poptipwindow.view.wheel.NumberWheelView;
 import com.bingor.poptipwindow.view.wheel.WheelItem;
 import com.bingor.poptipwindow.view.wheel.WheelView;
@@ -41,6 +42,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private SimpleListAdapter adapter;
+    private Tip tipWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,43 +220,45 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_list).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (adapter == null) {
-                    List<String> data = new ArrayList<>();
-                    data.add("13710267845");
-                    data.add("15025515656");
-                    data.add("13325161561");
-                    data.add("18945851215");
-                    data.add("18154545455");
-                    data.add("16545145158");
-                    data.add("15454661456");
-                    data.add("18714545458");
-                    adapter = new SimpleListAdapter(MainActivity.this, data, Color.parseColor("#1a56f1"));
-                    //是否需要删除按钮
-                    adapter.setNeedDelete(true);
-                    //是否需要选中标签
-                    adapter.setNeedTag(true);
+                if (tipWindow == null) {
+                    if (adapter == null) {
+                        List<String> data = new ArrayList<>();
+                        data.add("13710267845");
+                        data.add("15025515656");
+                        data.add("13325161561");
+                        data.add("18945851215");
+                        data.add("18154545455");
+                        data.add("16545145158");
+                        data.add("15454661456");
+                        data.add("18714545458");
+                        adapter = new SimpleListAdapter(MainActivity.this, data, Color.parseColor("#1a56f1"));
+                        //是否需要删除按钮
+                        adapter.setNeedDelete(true);
+                        //是否需要选中标签
+                        adapter.setNeedTag(true);
+                    }
+
+                    tipWindow = new ListTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
+                            //设置空白处不透明度（0=完全透明 1=完全不透明）
+                            .setAlpha(0.3f)
+                            //设置是否能点击空白处取消（对返回键无效，待改进）
+                            .setCancelable(true)
+                            //列表适配器
+                            .setAdapter(adapter)
+                            .setOnItemClickListener(new OnItemClickListener<String>() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id, String data) {
+                                    Toast.makeText(getBaseContext(), data, Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onItemDeleteClick(int position, String data) {
+                                    Toast.makeText(getBaseContext(), "del==" + data, Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .create();
                 }
-
-                new ListTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
-                        //设置空白处不透明度（0=完全透明 1=完全不透明）
-                        .setAlpha(0.3f)
-                        //设置是否能点击空白处取消（对返回键无效，待改进）
-                        .setCancelable(true)
-                        //列表适配器
-                        .setAdapter(adapter)
-                        .setOnItemClickListener(new OnItemClickListener<String>() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id, String data) {
-                                Toast.makeText(getBaseContext(), data, Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onItemDeleteClick(int position, String data) {
-                                Toast.makeText(getBaseContext(), "del==" + data, Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .create()
-                        .show(findViewById(R.id.bt_list));
+                tipWindow.show(findViewById(R.id.bt_list));
             }
         });
     }
