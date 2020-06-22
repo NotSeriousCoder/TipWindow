@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
                         adapter.setNeedTag(true);
                     }
 
-                    tipWindow = new ListTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_WINDOW)
+                    tipWindow = new ListTipWindowBuilder(MainActivity.this, TipWindowBuilder.TIP_TYPE_DIALOG)
                             //设置空白处不透明度（0=完全透明 1=完全不透明）
                             .setAlpha(0.3f)
                             //设置是否能点击空白处取消（对返回键无效，待改进）
@@ -248,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
                             .setOnItemClickListener(new OnItemClickListener<String>() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id, String data) {
+                                    findViewById(R.id.bt_list).performClick();
                                     Toast.makeText(getBaseContext(), data, Toast.LENGTH_SHORT).show();
                                 }
 

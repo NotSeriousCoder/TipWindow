@@ -1,6 +1,8 @@
 package com.bingor.poptipwindow.view.tip;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.text.TextUtils;
@@ -259,6 +261,7 @@ public abstract class Tip {
         } else {
             animation = AnimationUtils.loadAnimation(context, R.anim.translate_out);
         }
+        animation.setFillAfter(true);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -267,7 +270,14 @@ public abstract class Tip {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                dismissTip();
+                Handler mainHandler = new Handler(Looper.getMainLooper());
+                mainHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismissTip();
+                    }
+                }, 100);
+//                dismissTip();
             }
 
             @Override
@@ -276,6 +286,7 @@ public abstract class Tip {
             }
         });
         parent.startAnimation(animation);
+//        dismissTip();
         if (onTipBoxStateChangedListener != null) {
             onTipBoxStateChangedListener.onTipBoxDismissed();
         }
